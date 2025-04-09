@@ -13,6 +13,7 @@ import { Schema } from "mongoose";
  * - `coverArt`: The path to the album's cover art image.
  * - `releaseDate`: The release date of the album.
  * - `tracks`: An array of track names associated with the album.
+ * - `sourceUrl`: The URL of the source from which the album was fetched.
  */
 const albumSchema: Schema = new Schema(
   {
@@ -23,6 +24,7 @@ const albumSchema: Schema = new Schema(
     coverArt: String,
     releaseDate: String,
     tracks: [{ type: String }],
+    sourceUrl: String,
   },
   { collection: "Album" }
 );
