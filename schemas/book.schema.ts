@@ -14,6 +14,7 @@ import { Schema } from "mongoose";
  * - `coverArt`: The path to the book's cover art image.
  * - `datePublished`: The date the book was published.
  * - `pages`: The number of pages in the book.
+ * - `sourceUrl`: The URL of the source from which the book was fetched.
  */
 const bookSchema: Schema = new Schema(
   {
@@ -25,6 +26,7 @@ const bookSchema: Schema = new Schema(
     coverArt: String,
     datePublished: String,
     pages: Number,
+    sourceUrl: String,
   },
   { collection: "Book" }
 );
