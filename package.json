@@ -1,0 +1,19 @@
+{
+  "name": "upnext-node-server",
+  "version": "1.0.0",
+  "description": "Node.js HTTP Web server for the UpNext application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawrenceosher/UpNext-node-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lawrenceosher/UpNext-node-server/issues"
+  },
+  "homepage": "https://github.com/lawrenceosher/UpNext-node-server#readme"
+}
