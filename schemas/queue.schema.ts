@@ -7,7 +7,7 @@ import { Schema } from "mongoose";
  * This schema defines the structure for storing queues in the database.
  * Each Queue includes the following fields:
  * - `_id`: The unique id of the queue (not managed by MongoDB)
- * - `mediaType`: The type of media that this queue represents. One of 'Movie', 'TV', 'Album', 'Book', 'Game', 'Podcast'
+ * - `mediaType`: The type of media that this queue represents. One of 'Movie', 'TV', 'Album', 'Book', 'Video Game', 'Podcast'
  * - `user`: The user this queue belongs to. Can be null if is a group queue
  * - `group`: The group this queue belongs to. Can be null if is a personal queue
  * - `current`: The media that is yet to be consumed. This is an array of media ids
@@ -18,12 +18,14 @@ const queueSchema: Schema = new Schema(
     _id: String,
     mediaType: {
       type: String,
-      enum: ["Movie", "TV", "Album", "Book", "Game", "Podcast"],
+      enum: ["Movie", "TV", "Album", "Book", "Video Game", "Podcast"],
     },
-    user: {
-      type: String,
-      ref: "User",
-    },
+    users: [
+      {
+        type: String,
+        ref: "User",
+      },
+    ],
     group: {
       type: String,
       ref: "Group",
@@ -42,7 +44,7 @@ const queueSchema: Schema = new Schema(
     ],
     media: {
       type: String,
-      enum: ["Movie", "TV", "Album", "Book", "Game", "Podcast"],
+      enum: ["Movie", "TV", "Album", "Book", "Video Game", "Podcast"],
       required: true,
     },
   },

@@ -1,11 +1,11 @@
 import { Schema } from "mongoose";
 
 /**
- * Mongoose schema for the Game collection.
+ * Mongoose schema for the Video Game collection.
  *
- * This schema defines the structure for storing games in the database.
- * Games will be normalized from calls to external APIs and stored in the database.
- * Each Game includes the following fields:
+ * This schema defines the structure for storing video games in the database.
+ * Video Games will be normalized from calls to external APIs and stored in the database.
+ * Each Video Game includes the following fields:
  * - `_id`: The unique id of the game (not managed by MongoDB)
  * - `title`: The title of the game.
  * - `summary`: A brief summary of the game.
@@ -16,7 +16,7 @@ import { Schema } from "mongoose";
  * - `platforms`: An array of platforms on which the game is available.
  * - `sourceUrl`: The URL of the source from which the game was fetched.
  */
-const gameSchema: Schema = new Schema(
+const videoGameSchema: Schema = new Schema(
   {
     _id: String,
     title: String,
@@ -28,7 +28,7 @@ const gameSchema: Schema = new Schema(
     platforms: [{ type: String }],
     sourceUrl: String,
   },
-  { collection: "Game" }
+  { collection: "Video Game" }
 );
 
-export default gameSchema;
+export default videoGameSchema;
