@@ -11,6 +11,6 @@ import { Podcast } from '../types/podcast.d';
  *
  * @type {Model<Podcast>}
  */
-const PodcastModel: Model<Podcast> = mongoose.model<Podcast>('Podcast', podcastSchema);
+const PodcastModel: Model<Podcast> = mongoose.model<Podcast>('PodcastModel', podcastSchema);
 
 export default PodcastModel;

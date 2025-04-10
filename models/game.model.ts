@@ -11,6 +11,6 @@ import { VideoGame } from '../types/game.d';
  *
  * @type {Model<VideoGame>}
  */
-const VideoGameModel: Model<VideoGame> = mongoose.model<VideoGame>('Video Game', videoGameSchema);
+const VideoGameModel: Model<VideoGame> = mongoose.model<VideoGame>('VideoGameModel', videoGameSchema);
 
 export default VideoGameModel;

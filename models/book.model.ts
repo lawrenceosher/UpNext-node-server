@@ -11,6 +11,6 @@ import { Book } from '../types/book.d';
  *
  * @type {Model<Book>}
  */
-const BookModel: Model<Book> = mongoose.model<Book>('Book', bookSchema);
+const BookModel: Model<Book> = mongoose.model<Book>('BookModel', bookSchema);
 
 export default BookModel;

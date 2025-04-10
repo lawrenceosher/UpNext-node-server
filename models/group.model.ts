@@ -11,6 +11,6 @@ import { Group } from '../types/group';
  *
  * @type {Model<Group>}
  */
-const GroupModel: Model<Group> = mongoose.model<Group>('Group', groupSchema);
+const GroupModel: Model<Group> = mongoose.model<Group>('GroupModel', groupSchema);
 
 export default GroupModel;

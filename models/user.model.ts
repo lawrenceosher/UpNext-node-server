@@ -11,6 +11,6 @@ import { User } from '../types/user.d';
  *
  * @type {Model<User>}
  */
-const UserModel: Model<User> = mongoose.model<User>('User', userSchema);
+const UserModel: Model<User> = mongoose.model<User>('UserModel', userSchema);
 
 export default UserModel;

@@ -11,6 +11,6 @@ import { TV } from '../types/tv.d';
  *
  * @type {Model<TV>}
  */
-const TVModel: Model<TV> = mongoose.model<TV>('TV', tvSchema);
+const TVModel: Model<TV> = mongoose.model<TV>('TVModel', tvSchema);
 
 export default TVModel;

@@ -11,6 +11,6 @@ import { Album } from '../types/album.d';
  *
  * @type {Model<Album>}
  */
-const AlbumModel: Model<Album> = mongoose.model<Album>('Album', albumSchema);
+const AlbumModel: Model<Album> = mongoose.model<Album>('AlbumModel', albumSchema);
 
 export default AlbumModel;

@@ -11,6 +11,6 @@ import { Movie } from '../types/movie.d';
  *
  * @type {Model<Movie>}
  */
-const MovieModel: Model<Movie> = mongoose.model<Movie>('Movie', movieSchema);
+const MovieModel: Model<Movie> = mongoose.model<Movie>('MovieModel', movieSchema);
 
 export default MovieModel;
