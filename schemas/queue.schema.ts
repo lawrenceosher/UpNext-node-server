@@ -44,7 +44,7 @@ const queueSchema: Schema = new Schema(
     ],
     media: {
       type: String,
-      enum: ["Movie", "TV", "Album", "Book", "Video Game", "Podcast"],
+      enum: ["MovieModel", "TVModel", "AlbumModel", "BookModel", "VideoGameModel", "PodcastModel"],
       required: true,
     },
   },

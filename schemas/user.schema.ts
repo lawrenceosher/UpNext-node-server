@@ -36,13 +36,13 @@ const userSchema: Schema = new Schema(
     followers: [
       {
         type: String,
-        ref: "User",
+        ref: "UserModel",
       },
     ],
     following: [
       {
         type: String,
-        ref: "User",
+        ref: "UserModel",
       },
     ],
   },

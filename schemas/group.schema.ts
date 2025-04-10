@@ -17,7 +17,7 @@ const groupSchema: Schema = new Schema(
     users: [
       {
         type: String,
-        ref: "User",
+        ref: "UserModel",
       },
     ],
   },
