@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import userSchema from '../schemas/user.schema';
-import { User } from '../types/user';
+import userSchema from '../schemas/user.schema.js';
 
 /**
  * Mongoose model for the `User` collection.
@@ -9,8 +8,7 @@ import { User } from '../types/user';
  * `User` collection in the MongoDB database, and provides an interface for interacting with
  * the stored users.
  *
- * @type {Model<User>}
  */
-const UserModel = mongoose.model<User>('UserModel', userSchema);
+const UserModel = mongoose.model('UserModel', userSchema);
 
 export default UserModel;

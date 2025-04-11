@@ -51,5 +51,5 @@ export default function QueueController(app) {
   };
 
   app.get("/api/queue/:mediaType/search", searchMedia);
-  app.get("/api/:mediaType/:id", getMediaDetails);
+  app.get("/api/media/:mediaType/:id", getMediaDetails);
 }

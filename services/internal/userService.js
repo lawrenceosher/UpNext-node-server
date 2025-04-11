@@ -1,13 +1,7 @@
-import UserModel from "../../models/user.model";
+import UserModel from "../../models/user.model.js";
 
 export const saveUser = async (user) => {
   try {
-    // Check if user already exists
-    const userExists = await getUserByUsername(user.username);
-    if (userExists) {
-      throw Error("User already exists");
-    }
-
     // Create new user
     const result = await UserModel.create(user);
 
@@ -24,24 +18,33 @@ export const saveUser = async (user) => {
       lastName: result.lastName,
       email: result.email,
       role: result.role,
-      followers: result.followers,
-      following: result.following,
     };
 
     return safeUser;
   } catch (error) {
-    return { error: `Error occurred when saving user: ${error}` };
+    return { error: error };
   }
 };
 
-export const getUserByUsername = async (username) => {
+export const findUserByUsername = async (username) => {
   try {
-    const user = await UserModel.findOne({ username }).select("-password");
+    const user = await UserModel.findOne({ username: username }).select(
+      "-password"
+    );
+
+    return user;
+  } catch (error) {
+    return { error: `Error occurred when finding user: ${error}` };
+  }
+};
+
+export const findUserById = async (id) => {
+  try {
+    const user = await UserModel.findOne({ _id: id }).select("-password");
 
     if (!user) {
       throw Error("User not found");
     }
-
     return user;
   } catch (error) {
     return { error: `Error occurred when finding user: ${error}` };
@@ -80,10 +83,10 @@ export const loginUser = async (loginCredentials) => {
   }
 };
 
-export const deleteUserByUsername = async (username) => {
+export const deleteUserById = async (id) => {
   try {
     const deletedUser = await UserModel.findOneAndDelete({
-      username,
+      _id: id,
     }).select("-password");
 
     if (!deletedUser) {
@@ -92,14 +95,14 @@ export const deleteUserByUsername = async (username) => {
 
     return deletedUser;
   } catch (error) {
-    return { error: `Error occurred when finding user: ${error}` };
+    return { error: `Error occurred when deleting user: ${error}` };
   }
 };
 
-export const updateUser = async (username, updates) => {
+export const updateUser = async (id, updates) => {
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
-      { username },
+      { _id: id },
       { $set: updates },
       { new: true }
     ).select("-password");

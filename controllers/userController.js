@@ -1,6 +1,15 @@
-import { saveUser, loginUser, getUserByUsername, getUsersList, deleteUserByUsername, updateUser } from "../services/internal/userService.js";
+import {
+  saveUser,
+  loginUser,
+  findUserByUsername,
+  getUsersList,
+  deleteUserById,
+  updateUser,
+  findUserById,
+} from "../services/internal/userService.js";
+import { v4 as uuidv4 } from "uuid";
 
-const userController = (app) => {
+const UserController = (app) => {
   const isUserBodyValid = (req) =>
     req.body !== undefined &&
     req.body.username !== undefined &&
@@ -14,21 +23,27 @@ const userController = (app) => {
       return;
     }
 
+    const alreadyExistingUser = await findUserByUsername(req.body.username);
+    if (alreadyExistingUser) {
+      res.status(400).send("Username already exists");
+      return;
+    }
+
     const requestUser = req.body;
 
-    const user = {
+    const newUser = {
       ...requestUser,
+      _id: uuidv4(),
       dateJoined: new Date(),
-      biography: requestUser.biography ?? "",
     };
 
     try {
-      const result = await saveUser(user);
+      const result = await saveUser(newUser);
 
       if ("error" in result) {
         throw new Error(result.error);
       }
-
+      req.session["currentUser"] = result;
       res.status(200).json(result);
     } catch (error) {
       res.status(500).send(`Error when saving user: ${error}`);
@@ -53,17 +68,18 @@ const userController = (app) => {
         throw Error(user.error);
       }
 
+      req.session["currentUser"] = user;
       res.status(200).json(user);
     } catch (error) {
       res.status(500).send("Login failed");
     }
   };
 
-  const getUser = async (req, res) => {
+  const getUserByID = async (req, res) => {
     try {
-      const { username } = req.params;
+      const { userId } = req.params;
 
-      const user = await getUserByUsername(username);
+      const user = await findUserById(userId);
 
       if ("error" in user) {
         throw Error(user.error);
@@ -71,7 +87,7 @@ const userController = (app) => {
 
       res.status(200).json(user);
     } catch (error) {
-      res.status(500).send(`Error when getting user by username: ${error}`);
+      res.status(500).send(`Error when getting user by id: ${error}`);
     }
   };
 
@@ -89,35 +105,28 @@ const userController = (app) => {
     }
   };
 
-  const deleteUser = async (req, res) => {
+  const deleteUserByID = async (req, res) => {
     try {
-      const { username } = req.params;
+      const { userId } = req.params;
 
-      const deletedUser = await deleteUserByUsername(username);
+      const deletedUser = await deleteUserById(userId);
 
       if ("error" in deletedUser) {
         throw Error(deletedUser.error);
       }
 
-      socket.emit("userUpdate", {
-        user: deletedUser,
-        type: "deleted",
-      });
       res.status(200).json(deletedUser);
     } catch (error) {
-      res.status(500).send(`Error when deleting user by username: ${error}`);
+      res.status(500).send(`Error when deleting user by id: ${error}`);
     }
   };
 
-  const resetPassword = async (req, res) => {
+  const updateUserByID = async (req, res) => {
+    const { userId } = req.params;
+    const userUpdates = { ...req.body };
     try {
-      if (!isUserBodyValid(req)) {
-        res.status(400).send("Invalid user body");
-        return;
-      }
-
-      const updatedUser = await updateUser(req.body.username, {
-        password: req.body.password,
+      const updatedUser = await updateUser(userId, {
+        ...userUpdates,
       });
 
       if ("error" in updatedUser) {
@@ -126,17 +135,32 @@ const userController = (app) => {
 
       res.status(200).json(updatedUser);
     } catch (error) {
-      res.status(500).send(`Error when updating user password: ${error}`);
+      res.status(500).send(`Error when updating user: ${error}`);
     }
   };
 
-  // Define routes for the user-related operations.
-  app.post("/signup", createUser);
-  app.post("/login", userLogin);
-  app.patch("/resetPassword", resetPassword);
-  app.get("/getUser/:username", getUser);
-  app.get("/getUsers", getUsers);
-  app.delete("/deleteUser/:username", deleteUser);
+  const signout = (req, res) => {
+    req.session.destroy();
+    res.sendStatus(200);
+  };
+
+  const profile = async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) {
+      res.sendStatus(401);
+      return;
+    }
+    res.status(200).json(currentUser);
+  };
+
+  app.post("/api/users/signup", createUser);
+  app.post("/api/users/signout", signout);
+  app.post("/api/users/login", userLogin);
+  app.post("/api/users/profile", profile);
+  app.get("/api/users", getUsers);
+  app.get("/api/users/:userId", getUserByID);
+  app.delete("/api/users/:userId", deleteUserByID);
+  app.put("/api/users/:userId", updateUserByID);
 };
 
-export default userController;
+export default UserController;
