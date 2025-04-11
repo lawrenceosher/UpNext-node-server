@@ -79,7 +79,7 @@ const UserController = (app) => {
     try {
       const { username } = req.params;
 
-      const user = await getUserByUsername(username);
+      const user = await findUserByUsername(username);
 
       if ("error" in user) {
         throw Error(user.error);
@@ -146,8 +146,14 @@ const UserController = (app) => {
     }
   };
 
+  const signout = (req, res) => {
+    req.session.destroy();
+    res.sendStatus(200);
+  };
+
   // Define routes for the user-related operations.
   app.post("/api/users/signup", createUser);
+  app.post("/api/users/signout", signout);
   app.post("/login", userLogin);
   app.patch("/resetPassword", resetPassword);
   app.get("/getUser/:username", getUser);
