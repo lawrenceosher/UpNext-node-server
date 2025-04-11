@@ -19,7 +19,7 @@ import { Schema } from "mongoose";
  * - `totalSeasons`: The total number of seasons in the show.
  * - `sourceUrl`: The URL of the source from which the show was fetched.
  */
-const tvSchema: Schema = new Schema(
+const tvSchema = new Schema(
   {
     _id: String,
     title: String,

@@ -16,7 +16,7 @@ import { Schema } from "mongoose";
  * - `genres`: An array of genres associated with the movie.
  * - `sourceUrl`: The URL of the source from which the movie was fetched.
  */
-const movieSchema: Schema = new Schema(
+const movieSchema = new Schema(
   {
     _id: String,
     title: String,

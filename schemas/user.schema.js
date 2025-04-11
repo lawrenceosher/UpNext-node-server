@@ -16,7 +16,7 @@ import { Schema } from "mongoose";
  * - `followers`: The other users that follow this user.
  * - `following`: The other users that this user follows.
  */
-const userSchema: Schema = new Schema(
+const userSchema = new Schema(
   {
     _id: String,
     username: {

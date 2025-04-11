@@ -15,7 +15,7 @@ import { Schema } from "mongoose";
  * - `episodes`: An array of episode titles associated with the podcast.
  * - `sourceUrl`: The URL of the source from which the podcast was fetched.
  */
-const podcastSchema: Schema = new Schema(
+const podcastSchema = new Schema(
   {
     _id: String,
     title: String,

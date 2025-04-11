@@ -15,7 +15,7 @@ import { Schema } from "mongoose";
  * - `tracks`: An array of track names associated with the album.
  * - `sourceUrl`: The URL of the source from which the album was fetched.
  */
-const albumSchema: Schema = new Schema(
+const albumSchema = new Schema(
   {
     _id: String,
     title: String,
