@@ -79,9 +79,9 @@ const UserController = (app) => {
 
   const getUserByID = async (req, res) => {
     try {
-      const { _id } = req.body;
+      const { userId } = req.params;
 
-      const user = await findUserById(_id);
+      const user = await findUserById(userId);
 
       if ("error" in user) {
         throw Error(user.error);
@@ -107,11 +107,11 @@ const UserController = (app) => {
     }
   };
 
-  const deleteUser = async (req, res) => {
+  const deleteUserByID = async (req, res) => {
     try {
-      const { _id } = req.body;
+      const { userId } = req.params;
 
-      const deletedUser = await deleteUserById(_id);
+      const deletedUser = await deleteUserById(userId);
 
       if ("error" in deletedUser) {
         throw Error(deletedUser.error);
@@ -123,15 +123,12 @@ const UserController = (app) => {
     }
   };
 
-  const resetPassword = async (req, res) => {
+  const updateUserByID = async (req, res) => {
+    const { userId } = req.params;
+    const userUpdates = { ...req.body };
     try {
-      if (!isUserBodyValid(req)) {
-        res.status(400).send("Invalid user body");
-        return;
-      }
-
-      const updatedUser = await updateUser(req.body.username, {
-        password: req.body.password,
+      const updatedUser = await updateUser(userId, {
+        ...userUpdates,
       });
 
       if ("error" in updatedUser) {
@@ -158,16 +155,14 @@ const UserController = (app) => {
     res.status(200).json(currentUser);
   };
 
-  // Define routes for the user-related operations.
   app.post("/api/users/signup", createUser);
   app.post("/api/users/signout", signout);
   app.post("/api/users/login", userLogin);
-  app.get("/api/users", getUsers);
-  app.get("/api/user", getUserByID);
-  app.delete("/api/user", deleteUser);
   app.post("/api/users/profile", profile);
-
-  app.patch("/resetPassword", resetPassword);
+  app.get("/api/users", getUsers);
+  app.get("/api/users/:userId", getUserByID);
+  app.delete("/api/users/:userId", deleteUserByID);
+  app.put("/api/users/:userId", updateUserByID);
 };
 
 export default UserController;
