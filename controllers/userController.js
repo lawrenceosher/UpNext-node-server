@@ -117,7 +117,7 @@ const UserController = (app) => {
 
       res.status(200).json(deletedUser);
     } catch (error) {
-      res.status(500).send(`Error when deleting user by username: ${error}`);
+      res.status(500).send(`Error when deleting user by id: ${error}`);
     }
   };
 
@@ -135,7 +135,7 @@ const UserController = (app) => {
 
       res.status(200).json(updatedUser);
     } catch (error) {
-      res.status(500).send(`Error when updating user password: ${error}`);
+      res.status(500).send(`Error when updating user: ${error}`);
     }
   };
 
