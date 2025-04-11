@@ -10,7 +10,7 @@ import { Schema } from "mongoose";
  * - `groupName`: The name of the group
  * - `users`: The users part of the group
  */
-const groupSchema: Schema = new Schema(
+const groupSchema = new Schema(
   {
     _id: String,
     groupName: String,
