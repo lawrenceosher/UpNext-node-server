@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import podcastSchema from '../schemas/podcast.schema';
-import { Podcast } from '../types/podcast.d';
+import { Podcast } from '../types/podcast';
 
 /**
  * Mongoose model for the `Podcast` collection.
@@ -11,6 +11,6 @@ import { Podcast } from '../types/podcast.d';
  *
  * @type {Model<Podcast>}
  */
-const PodcastModel: Model<Podcast> = mongoose.model<Podcast>('PodcastModel', podcastSchema);
+const PodcastModel = mongoose.model<Podcast>('PodcastModel', podcastSchema);
 
 export default PodcastModel;

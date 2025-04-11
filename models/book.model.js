@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import bookSchema from '../schemas/book.schema';
-import { Book } from '../types/book.d';
+import { Book } from '../types/book';
 
 /**
  * Mongoose model for the `Book` collection.
@@ -11,6 +11,6 @@ import { Book } from '../types/book.d';
  *
  * @type {Model<Book>}
  */
-const BookModel: Model<Book> = mongoose.model<Book>('BookModel', bookSchema);
+const BookModel = mongoose.model<Book>('BookModel', bookSchema);
 
 export default BookModel;

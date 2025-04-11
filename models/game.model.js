@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import videoGameSchema from '../schemas/game.schema';
-import { VideoGame } from '../types/game.d';
+import { VideoGame } from '../types/game';
 
 /**
  * Mongoose model for the `Video Game` collection.
@@ -11,6 +11,6 @@ import { VideoGame } from '../types/game.d';
  *
  * @type {Model<VideoGame>}
  */
-const VideoGameModel: Model<VideoGame> = mongoose.model<VideoGame>('VideoGameModel', videoGameSchema);
+const VideoGameModel = mongoose.model<VideoGame>('VideoGameModel', videoGameSchema);
 
 export default VideoGameModel;
