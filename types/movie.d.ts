@@ -8,6 +8,7 @@ export interface Movie {
   posterPath: string;
   cast: string[];
   genres: string[];
+  runtime: number; // in minutes
   sourceUrl: string;
 }
 

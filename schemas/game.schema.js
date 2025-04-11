@@ -16,7 +16,7 @@ import { Schema } from "mongoose";
  * - `platforms`: An array of platforms on which the game is available.
  * - `sourceUrl`: The URL of the source from which the game was fetched.
  */
-const videoGameSchema: Schema = new Schema(
+const videoGameSchema = new Schema(
   {
     _id: String,
     title: String,

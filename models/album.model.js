@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import albumSchema from '../schemas/album.schema';
-import { Album } from '../types/album.d';
+import { Album } from '../types/album';
 
 /**
  * Mongoose model for the `Album` collection.
@@ -11,6 +11,6 @@ import { Album } from '../types/album.d';
  *
  * @type {Model<Album>}
  */
-const AlbumModel: Model<Album> = mongoose.model<Album>('AlbumModel', albumSchema);
+const AlbumModel = mongoose.model<Album>('AlbumModel', albumSchema);
 
 export default AlbumModel;

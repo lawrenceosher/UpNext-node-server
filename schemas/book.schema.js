@@ -16,7 +16,7 @@ import { Schema } from "mongoose";
  * - `pages`: The number of pages in the book.
  * - `sourceUrl`: The URL of the source from which the book was fetched.
  */
-const bookSchema: Schema = new Schema(
+const bookSchema = new Schema(
   {
     _id: String,
     title: String,

@@ -13,7 +13,7 @@ import { Schema } from "mongoose";
  * - `current`: The media that is yet to be consumed. This is an array of media ids
  * - `history`: The media that has been consumed in the past. This is an array of media ids
  */
-const queueSchema: Schema = new Schema(
+const queueSchema = new Schema(
   {
     _id: String,
     mediaType: {

@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import userSchema from '../schemas/user.schema';
-import { User } from '../types/user.d';
+import { User } from '../types/user';
 
 /**
  * Mongoose model for the `User` collection.
@@ -11,6 +11,6 @@ import { User } from '../types/user.d';
  *
  * @type {Model<User>}
  */
-const UserModel: Model<User> = mongoose.model<User>('UserModel', userSchema);
+const UserModel = mongoose.model<User>('UserModel', userSchema);
 
 export default UserModel;
