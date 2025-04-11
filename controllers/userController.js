@@ -115,10 +115,6 @@ const UserController = (app) => {
         throw Error(deletedUser.error);
       }
 
-      socket.emit("userUpdate", {
-        user: deletedUser,
-        type: "deleted",
-      });
       res.status(200).json(deletedUser);
     } catch (error) {
       res.status(500).send(`Error when deleting user by username: ${error}`);
@@ -154,7 +150,8 @@ const UserController = (app) => {
   // Define routes for the user-related operations.
   app.post("/api/users/signup", createUser);
   app.post("/api/users/signout", signout);
-  app.post("/login", userLogin);
+  app.post("/api/users/login", userLogin);
+
   app.patch("/resetPassword", resetPassword);
   app.get("/getUser/:username", getUser);
   app.get("/getUsers", getUsers);
