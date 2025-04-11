@@ -20,8 +20,6 @@ export interface UserCredentials {
  * - `dateJoined`: The date when the user registered.
  * - `email`: The user's email address.
  * - `role`: The user's role, either 'USER' or 'ADMIN'.
- * - `followers`: An array of users representing the users that follow this user.
- * - `following`: An array of users representing the users that this user follows.
  */
 export interface User extends UserCredentials {
   _id: string;
@@ -30,8 +28,6 @@ export interface User extends UserCredentials {
   dateJoined: Date;
   email: string;
   role: string;
-  followers: User[];
-  following: User[];
 }
 
 /**

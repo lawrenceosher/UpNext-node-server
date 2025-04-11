@@ -18,8 +18,6 @@ export const saveUser = async (user) => {
       lastName: result.lastName,
       email: result.email,
       role: result.role,
-      followers: result.followers,
-      following: result.following,
     };
 
     return safeUser;

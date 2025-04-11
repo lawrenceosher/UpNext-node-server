@@ -32,11 +32,9 @@ const UserController = (app) => {
     const requestUser = req.body;
 
     const newUser = {
-      _id: uuidv4(),
       ...requestUser,
+      _id: uuidv4(),
       dateJoined: new Date(),
-      followers: [],
-      following: [],
     };
 
     try {

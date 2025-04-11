@@ -13,8 +13,6 @@ import { Schema } from "mongoose";
  * - `dateJoined`: The date the user joined the platform.
  * - `email`: The email of the user.
  * - `role`: The role of the user that is either a regular 'USER' or 'ADMIN' with elevated privileges.
- * - `followers`: The other users that follow this user.
- * - `following`: The other users that this user follows.
  */
 const userSchema = new Schema(
   {
@@ -33,18 +31,6 @@ const userSchema = new Schema(
       enum: ["USER", "ADMIN"],
       default: "USER",
     },
-    followers: [
-      {
-        type: String,
-        ref: "UserModel",
-      },
-    ],
-    following: [
-      {
-        type: String,
-        ref: "UserModel",
-      },
-    ],
   },
   { collection: "User" }
 );
