@@ -28,4 +28,10 @@ if (process.env.NODE_ENV !== "development") {
 }
 app.use(session(sessionOptions));
 app.use(express.json());
+app.get('/', (req, res) => {
+  res.send('hello world');
+  res.end();
+});
+
 app.listen(process.env.PORT || 4000);
+console.log("Server running on port", process.env.PORT || 4000);
