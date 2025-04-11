@@ -26,6 +26,7 @@ const movieSchema = new Schema(
     posterPath: String,
     cast: [{ type: String }],
     genres: [{ type: String }],
+    runtime: Number,
     sourceUrl: String,
   },
   { collection: "Movie" }
