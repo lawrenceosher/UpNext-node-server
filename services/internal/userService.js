@@ -1,13 +1,7 @@
-import UserModel from "../../models/user.model";
+import UserModel from "../../models/user.model.js";
 
 export const saveUser = async (user) => {
   try {
-    // Check if user already exists
-    const userExists = await getUserByUsername(user.username);
-    if (userExists) {
-      throw Error("User already exists");
-    }
-
     // Create new user
     const result = await UserModel.create(user);
 
@@ -30,23 +24,12 @@ export const saveUser = async (user) => {
 
     return safeUser;
   } catch (error) {
-    return { error: `Error occurred when saving user: ${error}` };
+    return { error: error };
   }
 };
 
-export const getUserByUsername = async (username) => {
-  try {
-    const user = await UserModel.findOne({ username }).select("-password");
-
-    if (!user) {
-      throw Error("User not found");
-    }
-
-    return user;
-  } catch (error) {
-    return { error: `Error occurred when finding user: ${error}` };
-  }
-};
+export const findUserByUsername = async (username) =>
+  await UserModel.findOne({ username: username });
 
 export const getUsersList = async () => {
   try {

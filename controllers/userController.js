@@ -1,6 +1,14 @@
-import { saveUser, loginUser, getUserByUsername, getUsersList, deleteUserByUsername, updateUser } from "../services/internal/userService.js";
+import {
+  saveUser,
+  loginUser,
+  findUserByUsername,
+  getUsersList,
+  deleteUserByUsername,
+  updateUser,
+} from "../services/internal/userService.js";
+import { v4 as uuidv4 } from "uuid";
 
-const userController = (app) => {
+const UserController = (app) => {
   const isUserBodyValid = (req) =>
     req.body !== undefined &&
     req.body.username !== undefined &&
@@ -14,21 +22,29 @@ const userController = (app) => {
       return;
     }
 
+    const alreadyExistingUser = await findUserByUsername(req.body.username);
+    if (alreadyExistingUser) {
+      res.status(400).send("Username already exists");
+      return;
+    }
+
     const requestUser = req.body;
 
-    const user = {
+    const newUser = {
+      _id: uuidv4(),
       ...requestUser,
       dateJoined: new Date(),
-      biography: requestUser.biography ?? "",
+      followers: [],
+      following: [],
     };
 
     try {
-      const result = await saveUser(user);
+      const result = await saveUser(newUser);
 
       if ("error" in result) {
         throw new Error(result.error);
       }
-
+      req.session["currentUser"] = result;
       res.status(200).json(result);
     } catch (error) {
       res.status(500).send(`Error when saving user: ${error}`);
@@ -131,7 +147,7 @@ const userController = (app) => {
   };
 
   // Define routes for the user-related operations.
-  app.post("/signup", createUser);
+  app.post("/api/users/signup", createUser);
   app.post("/login", userLogin);
   app.patch("/resetPassword", resetPassword);
   app.get("/getUser/:username", getUser);
@@ -139,4 +155,4 @@ const userController = (app) => {
   app.delete("/deleteUser/:username", deleteUser);
 };
 
-export default userController;
+export default UserController;
