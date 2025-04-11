@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
 import session from "express-session";
+import QueueController from "./controllers/queueController.js";
 
 const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/upnext"
 mongoose.connect(CONNECTION_STRING);
@@ -32,6 +33,8 @@ app.get('/', (req, res) => {
   res.send('hello world');
   res.end();
 });
+
+QueueController(app);
 
 app.listen(process.env.PORT || 4000);
 console.log("Server running on port", process.env.PORT || 4000);
