@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import queueSchema from '../schemas/queue.schema';
-import { Queue } from '../types/queue';
+import queueSchema from '../schemas/queue.schema.js';
 
 /**
  * Mongoose model for the `Queue` collection.
@@ -9,8 +8,7 @@ import { Queue } from '../types/queue';
  * `Queue` collection in the MongoDB database, and provides an interface for interacting with
  * the stored queues.
  *
- * @type {Model<Queue>}
  */
-const QueueModel = mongoose.model<Queue>('QueueModel', queueSchema);
+const QueueModel = mongoose.model('QueueModel', queueSchema);
 
 export default QueueModel;
