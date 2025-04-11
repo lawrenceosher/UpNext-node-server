@@ -3,8 +3,9 @@ import {
   loginUser,
   findUserByUsername,
   getUsersList,
-  deleteUserByUsername,
+  deleteUserById,
   updateUser,
+  findUserById,
 } from "../services/internal/userService.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -69,17 +70,18 @@ const UserController = (app) => {
         throw Error(user.error);
       }
 
+      req.session["currentUser"] = user;
       res.status(200).json(user);
     } catch (error) {
       res.status(500).send("Login failed");
     }
   };
 
-  const getUser = async (req, res) => {
+  const getUserByID = async (req, res) => {
     try {
-      const { username } = req.params;
+      const { _id } = req.body;
 
-      const user = await findUserByUsername(username);
+      const user = await findUserById(_id);
 
       if ("error" in user) {
         throw Error(user.error);
@@ -87,7 +89,7 @@ const UserController = (app) => {
 
       res.status(200).json(user);
     } catch (error) {
-      res.status(500).send(`Error when getting user by username: ${error}`);
+      res.status(500).send(`Error when getting user by id: ${error}`);
     }
   };
 
@@ -107,9 +109,9 @@ const UserController = (app) => {
 
   const deleteUser = async (req, res) => {
     try {
-      const { username } = req.params;
+      const { _id } = req.body;
 
-      const deletedUser = await deleteUserByUsername(username);
+      const deletedUser = await deleteUserById(_id);
 
       if ("error" in deletedUser) {
         throw Error(deletedUser.error);
@@ -147,15 +149,25 @@ const UserController = (app) => {
     res.sendStatus(200);
   };
 
+  const profile = async (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) {
+      res.sendStatus(401);
+      return;
+    }
+    res.status(200).json(currentUser);
+  };
+
   // Define routes for the user-related operations.
   app.post("/api/users/signup", createUser);
   app.post("/api/users/signout", signout);
   app.post("/api/users/login", userLogin);
+  app.get("/api/users", getUsers);
+  app.get("/api/user", getUserByID);
+  app.delete("/api/user", deleteUser);
+  app.post("/api/users/profile", profile);
 
   app.patch("/resetPassword", resetPassword);
-  app.get("/getUser/:username", getUser);
-  app.get("/getUsers", getUsers);
-  app.delete("/deleteUser/:username", deleteUser);
 };
 
 export default UserController;

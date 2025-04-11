@@ -29,7 +29,20 @@ export const saveUser = async (user) => {
 };
 
 export const findUserByUsername = async (username) =>
-  await UserModel.findOne({ username: username });
+  await UserModel.findOne({ username: username }).select("-password");
+
+export const findUserById = async (id) => {
+  try {
+    const user = await UserModel.findOne({ _id: id }).select("-password");
+
+    if (!user) {
+      throw Error("User not found");
+    }
+    return user;
+  } catch (error) {
+    return { error: `Error occurred when finding user: ${error}` };
+  }
+};
 
 export const getUsersList = async () => {
   try {
@@ -63,10 +76,10 @@ export const loginUser = async (loginCredentials) => {
   }
 };
 
-export const deleteUserByUsername = async (username) => {
+export const deleteUserById = async (id) => {
   try {
     const deletedUser = await UserModel.findOneAndDelete({
-      username,
+      _id: id
     }).select("-password");
 
     if (!deletedUser) {
@@ -75,7 +88,7 @@ export const deleteUserByUsername = async (username) => {
 
     return deletedUser;
   } catch (error) {
-    return { error: `Error occurred when finding user: ${error}` };
+    return { error: `Error occurred when deleting user: ${error}` };
   }
 };
 
