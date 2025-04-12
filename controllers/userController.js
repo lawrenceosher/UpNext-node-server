@@ -1,3 +1,4 @@
+import { createMovieQueue, createTVQueue, createAlbumQueue, createBookQueue, createVideoGameQueue, createPodcastQueue } from "../services/internal/queueService.js";
 import {
   saveUser,
   loginUser,
@@ -43,6 +44,33 @@ const UserController = (app) => {
       if ("error" in result) {
         throw new Error(result.error);
       }
+
+      // Create the new queues for the user
+      const movieQueueResult = await createMovieQueue(newUser.username, null);
+      if ("error" in movieQueueResult) {
+        throw new Error(movieQueueResult.error);
+      }
+      const tvQueueResult = await createTVQueue(newUser.username, null);
+      if ("error" in tvQueueResult) {
+        throw new Error(tvQueueResult.error);
+      }
+      const albumQueueResult = await createAlbumQueue(newUser.username, null);
+      if ("error" in albumQueueResult) {
+        throw new Error(albumQueueResult.error);
+      }
+      const bookQueueResult = await createBookQueue(newUser.username, null);
+      if ("error" in bookQueueResult) {
+        throw new Error(bookQueueResult.error);
+      }
+      const videoGameQueueResult = await createVideoGameQueue(newUser.username, null);
+      if ("error" in videoGameQueueResult) {
+        throw new Error(videoGameQueueResult.error);
+      }
+      const podcastQueueResult = await createPodcastQueue(newUser.username, null);
+      if ("error" in podcastQueueResult) {
+        throw new Error(podcastQueueResult.error);
+      }
+
       req.session["currentUser"] = result;
       res.status(200).json(result);
     } catch (error) {

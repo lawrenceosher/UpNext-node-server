@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import bookSchema from '../schemas/book.schema';
-import { Book } from '../types/book';
+import bookSchema from '../schemas/book.schema.js';
 
 /**
  * Mongoose model for the `Book` collection.
@@ -9,8 +8,7 @@ import { Book } from '../types/book';
  * `Book` collection in the MongoDB database, and provides an interface for interacting with
  * the stored books.
  *
- * @type {Model<Book>}
  */
-const BookModel = mongoose.model<Book>('BookModel', bookSchema);
+const BookModel = mongoose.model('BookModel', bookSchema);
 
 export default BookModel;

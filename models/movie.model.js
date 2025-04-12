@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import movieSchema from '../schemas/movie.schema'
-import { Movie } from '../types/movie';
+import movieSchema from '../schemas/movie.schema.js'
 
 /**
  * Mongoose model for the `Movie` collection.
@@ -9,8 +8,7 @@ import { Movie } from '../types/movie';
  * `Movie` collection in the MongoDB database, and provides an interface for interacting with
  * the stored movies.
  *
- * @type {Model<Movie>}
  */
-const MovieModel = mongoose.model<Movie>('MovieModel', movieSchema);
+const MovieModel = mongoose.model('MovieModel', movieSchema);
 
 export default MovieModel;
