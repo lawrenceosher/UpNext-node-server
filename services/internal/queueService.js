@@ -66,7 +66,7 @@ export async function createBookQueue(username, group) {
 export async function createVideoGameQueue(username, group) {
   const newVideoGameQueue = {
     _id: uuidv4(),
-    mediaType: "Video Game",
+    mediaType: "VideoGame",
     users: [username],
     group,
     current: [],
@@ -111,6 +111,48 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     throw new Error("Media already in queue");
   }
 
+  if (mediaType === "Movie") {
+    const movie = await MovieModel.findOne({ _id: media._id });
+    if (!movie) {
+      await MovieModel.create(media);
+    }
+  } 
+
+  if (mediaType === "TV") {
+    const show = await TVModel.findOne({ _id: media._id });
+    if (!show) {
+      await TVModel.create(media);
+    }
+  } 
+
+  if (mediaType === "Album") {
+    const album = await AlbumModel.findOne({ _id: media._id });
+    if (!album) {
+      await AlbumModel.create(media);
+    }
+  } 
+  
+  if (mediaType === "Book") {
+    const book = await BookModel.findOne({ _id: media._id });
+    if (!book) {
+      await BookModel.create(media);
+    }
+  } 
+  
+  if (mediaType === "VideoGame") {
+    const videoGames = await VideoGameModel.findOne({ _id: media._id });
+    if (!videoGames) {
+      await VideoGameModel.create(media);
+    }
+  } 
+  
+  if (mediaType === "Podcast") {
+    const podcasts = await PodcastModel.findOne({ _id: media._id });
+    if (!podcasts) {
+      await PodcastModel.create(media);
+    }
+  }
+
   const queue = await QueueModel.findOneAndUpdate(
     { _id: queueId },
     { $addToSet: { current: media._id } },
@@ -121,38 +163,6 @@ export async function addMediaToQueue(mediaType, queueId, media) {
 
   if (!queue) {
     throw new Error("Queue not found");
-  }
-
-  if (mediaType === "Movie") {
-    const movies = await MovieModel.find({ _id: { $in: media._id } });
-    if (!movies) {
-      await MovieModel.create(media);
-    }
-  } else if (mediaType === "TV") {
-    const shows = await TVModel.find({ _id: { $in: media._id } });
-    if (!shows) {
-      await TVModel.create(media);
-    }
-  } else if (mediaType === "Album") {
-    const albums = await AlbumModel.find({ _id: { $in: media._id } });
-    if (!albums) {
-      await AlbumModel.create(media);
-    }
-  } else if (mediaType === "Book") {
-    const books = await BookModel.find({ _id: { $in: media._id } });
-    if (!books) {
-      await BookModel.create(media);
-    }
-  } else if (mediaType === "VideoGame") {
-    const videoGames = await VideoGameModel.find({ _id: { $in: media._id } });
-    if (!videoGames) {
-      await VideoGameModel.create(media);
-    }
-  } else if (mediaType === "Podcast") {
-    const podcasts = await PodcastModel.find({ _id: { $in: media._id } });
-    if (!podcasts) {
-      await PodcastModel.create(media);
-    }
   }
 
   return queue;
