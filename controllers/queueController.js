@@ -7,6 +7,8 @@ import {
 import {
   searchSpotifyAlbums,
   getAlbumDetailsFromSpotify,
+  searchSpotifyPodcasts,
+  getPodcastDetailsFromSpotify,
 } from "../services/external/spotifyService.js";
 import {
   getQueueByMediaTypeAndUsername,
@@ -51,6 +53,17 @@ export default function QueueController(app) {
     res.json(results);
   };
 
+  const searchPodcasts = async (req, res) => {
+    const { query } = req.query;
+    const results = await searchSpotifyPodcasts(query);
+    res.json(results);
+  }
+  const getPodcastDetails = async (req, res) => {
+    const { id } = req.params;
+    const results = await getPodcastDetailsFromSpotify(id);
+    res.json(results);
+  }
+
   const searchMedia = async (req, res) => {
     const { mediaType } = req.params;
     if (mediaType === "movie") {
@@ -59,6 +72,8 @@ export default function QueueController(app) {
       searchTVShows(req, res);
     } else if (mediaType === "album") {
       searchAlbums(req, res);
+    } else if (mediaType === "podcast") {
+      searchPodcasts(req, res);
     } else {
       res.status(400).json({ error: "Invalid media type" });
     }
@@ -72,7 +87,9 @@ export default function QueueController(app) {
       getTVShowDetails(req, res);
     } else if (mediaType === "album") {
       getAlbumDetails(req, res);
-    } else {
+    } else if (mediaType === "podcast") {
+      getPodcastDetails(req, res);
+    }else {
       res.status(400).json({ error: "Invalid media type" });
     }
   };
