@@ -1,5 +1,10 @@
 import QueueModel from "../../models/queue.model.js";
 import MovieModel from "../../models/movie.model.js";
+import TVModel from "../../models/tv.model.js";
+import AlbumModel from "../../models/album.model.js";
+import BookModel from "../../models/book.model.js";
+import VideoGameModel from "../../models/game.model.js";
+import PodcastModel from "../../models/podcast.model.js";
 import { v4 as uuidv4 } from "uuid";
 
 export async function createMovieQueue(username, group) {
@@ -122,6 +127,31 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     const movies = await MovieModel.find({ _id: { $in: media._id } });
     if (!movies) {
       await MovieModel.create(media);
+    }
+  } else if (mediaType === "TV") {
+    const shows = await TVModel.find({ _id: { $in: media._id } });
+    if (!shows) {
+      await TVModel.create(media);
+    }
+  } else if (mediaType === "Album") {
+    const albums = await AlbumModel.find({ _id: { $in: media._id } });
+    if (!albums) {
+      await AlbumModel.create(media);
+    }
+  } else if (mediaType === "Book") {
+    const books = await BookModel.find({ _id: { $in: media._id } });
+    if (!books) {
+      await BookModel.create(media);
+    }
+  } else if (mediaType === "VideoGame") {
+    const videoGames = await VideoGameModel.find({ _id: { $in: media._id } });
+    if (!videoGames) {
+      await VideoGameModel.create(media);
+    }
+  } else if (mediaType === "Podcast") {
+    const podcasts = await PodcastModel.find({ _id: { $in: media._id } });
+    if (!podcasts) {
+      await PodcastModel.create(media);
     }
   }
 

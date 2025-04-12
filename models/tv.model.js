@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import tvSchema from '../schemas/tv.schema';
-import { TV } from '../types/tv';
+import tvSchema from '../schemas/tv.schema.js';
 
 /**
  * Mongoose model for the `TV` collection.
@@ -9,8 +8,7 @@ import { TV } from '../types/tv';
  * `TV` collection in the MongoDB database, and provides an interface for interacting with
  * the stored TV shows.
  *
- * @type {Model<TV>}
  */
-const TVModel = mongoose.model<TV>('TVModel', tvSchema);
+const TVModel = mongoose.model('TVModel', tvSchema);
 
 export default TVModel;

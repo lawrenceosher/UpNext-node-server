@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import podcastSchema from '../schemas/podcast.schema';
-import { Podcast } from '../types/podcast';
+import podcastSchema from '../schemas/podcast.schema.js';
 
 /**
  * Mongoose model for the `Podcast` collection.
@@ -8,9 +7,8 @@ import { Podcast } from '../types/podcast';
  * This model is created using the `Podcast` interface and the `podcastSchema`, representing the
  * `Podcast` collection in the MongoDB database, and provides an interface for interacting with
  * the stored podcasts.
- *
- * @type {Model<Podcast>}
+ * 
  */
-const PodcastModel = mongoose.model<Podcast>('PodcastModel', podcastSchema);
+const PodcastModel = mongoose.model('PodcastModel', podcastSchema);
 
 export default PodcastModel;
