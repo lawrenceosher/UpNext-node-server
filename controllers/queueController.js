@@ -10,7 +10,14 @@ import {
   searchSpotifyPodcasts,
   getPodcastDetailsFromSpotify,
 } from "../services/external/spotifyService.js";
-import { searchIGDBGames, fetchGameById } from "../services/external/igdbService.js";
+import {
+  searchIGDBGames,
+  fetchGameById,
+} from "../services/external/igdbService.js";
+import {
+  searchGoogleBooks,
+  fetchGoogleBookById,
+} from "../services/external/googleBooksService.js";
 import {
   getQueueByMediaTypeAndUsername,
   addMediaToQueue,
@@ -58,12 +65,12 @@ export default function QueueController(app) {
     const { query } = req.query;
     const results = await searchSpotifyPodcasts(query);
     res.json(results);
-  }
+  };
   const getPodcastDetails = async (req, res) => {
     const { id } = req.params;
     const results = await getPodcastDetailsFromSpotify(id);
     res.json(results);
-  }
+  };
 
   const searchVideoGames = async (req, res) => {
     const { query } = req.query;
@@ -73,6 +80,17 @@ export default function QueueController(app) {
   const getVideoGameDetails = async (req, res) => {
     const { id } = req.params;
     const results = await fetchGameById(id);
+    res.json(results);
+  };
+
+  const searchBooks = async (req, res) => {
+    const { query } = req.query;
+    const results = await searchGoogleBooks(query);
+    res.json(results);
+  };
+  const getBookDetails = async (req, res) => {
+    const { id } = req.params;
+    const results = await fetchGoogleBookById(id);
     res.json(results);
   };
 
@@ -88,6 +106,8 @@ export default function QueueController(app) {
       searchPodcasts(req, res);
     } else if (mediaType === "VideoGame") {
       searchVideoGames(req, res);
+    } else if (mediaType === "Book") {
+      searchBooks(req, res);
     } else {
       res.status(400).json({ error: "Invalid media type" });
     }
@@ -105,6 +125,8 @@ export default function QueueController(app) {
       getPodcastDetails(req, res);
     } else if (mediaType === "VideoGame") {
       getVideoGameDetails(req, res);
+    } else if (mediaType === "Book") {
+      getBookDetails(req, res);
     } else {
       res.status(400).json({ error: "Invalid media type" });
     }
