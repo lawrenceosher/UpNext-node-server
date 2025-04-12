@@ -4,7 +4,11 @@ import {
   getMovieById,
   getTVShowById,
 } from "../services/external/tmdbService.js";
-import { getQueueByMediaTypeAndUsername, addMediaToQueue } from "../services/internal/queueService.js";
+import {
+  getQueueByMediaTypeAndUsername,
+  addMediaToQueue,
+  moveMediaFromCurrentToHistory,
+} from "../services/internal/queueService.js";
 
 export default function QueueController(app) {
   const searchMovies = async (req, res) => {
@@ -85,10 +89,41 @@ export default function QueueController(app) {
     } catch (error) {
       res.status(500).json({ error: `${error}` });
     }
-  }
+  };
+
+  const moveFromCurrentToHistory = async (req, res) => {
+    const { mediaType, queueId } = req.params;
+    const { media } = req.body;
+
+    try {
+      const resultQueue = await moveMediaFromCurrentToHistory(
+        mediaType,
+        queueId,
+        media
+      );
+
+      if ("error" in resultQueue) {
+        throw new Error(resultQueue.error);
+      }
+
+      res.status(200).json(resultQueue);
+    } catch (error) {
+      res.status(500).json({ error: `${error}` });
+    }
+  };
 
   app.get("/api/queue/:mediaType/search", searchMedia);
   app.get("/api/media/:mediaType/:id", getMediaDetails);
-  app.get("/api/queue/:mediaType/users/:username", fetchQueueByMediaTypeAndUsername);
-  app.put("/api/queue/:mediaType/:queueId/addToCurrent", addMediaToExistingQueue);
+  app.get(
+    "/api/queue/:mediaType/users/:username",
+    fetchQueueByMediaTypeAndUsername
+  );
+  app.put(
+    "/api/queue/:mediaType/:queueId/addToCurrent",
+    addMediaToExistingQueue
+  );
+  app.put(
+    "/api/queue/:mediaType/:queueId/addToHistory",
+    moveFromCurrentToHistory
+  );
 }
