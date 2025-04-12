@@ -97,11 +97,13 @@ export async function getQueueByMediaTypeAndUsername(mediaType, username) {
 }
 
 export async function addMediaToQueue(mediaType, queueId, media) {
-  const currentQueue = await QueueModel.findOne({ _id: queueId }).select(
-    "current"
-  );
+  const currentQueue = await QueueModel.findOne({ _id: queueId });
 
-  if (currentQueue && currentQueue.current.includes(media._id)) {
+  if (
+    currentQueue &&
+    currentQueue.current.includes(media._id) ||
+    currentQueue.history.includes(media._id)
+  ) {
     throw new Error("Media already in queue");
   }
 
@@ -118,7 +120,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
   }
 
   if (mediaType === "Movie") {
-    await MovieModel.create(media);
+    const movies = await MovieModel.find({ _id: { $in: media._id } });
+    if (!movies) {
+      await MovieModel.create(media);
+    }
   }
 
   return queue;
@@ -142,3 +147,36 @@ export async function moveMediaFromCurrentToHistory(mediaType, queueId, media) {
 
   return queue;
 }
+
+export async function deleteMediaFromCurrentQueue(mediaType, queueId, mediaId) {
+  const queue = await QueueModel.findOneAndUpdate(
+    { _id: queueId },
+    { $pull: { current: mediaId } },
+    { new: true }
+  )
+    .populate({ path: "current", model: `${mediaType}Model` })
+    .populate({ path: "history", model: `${mediaType}Model` });
+
+  if (!queue) {
+    throw new Error("Queue not found");
+  }
+
+  return queue;
+}
+
+export async function deleteMediaFromHistoryQueue(mediaType, queueId, mediaId) {
+  const queue = await QueueModel.findOneAndUpdate(
+    { _id: queueId },
+    { $pull: { history: mediaId } },
+    { new: true }
+  )
+    .populate({ path: "current", model: `${mediaType}Model` })
+    .populate({ path: "history", model: `${mediaType}Model` });
+
+  if (!queue) {
+    throw new Error("Queue not found");
+  }
+
+  return queue;
+}
+

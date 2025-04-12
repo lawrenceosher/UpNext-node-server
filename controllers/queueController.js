@@ -8,6 +8,8 @@ import {
   getQueueByMediaTypeAndUsername,
   addMediaToQueue,
   moveMediaFromCurrentToHistory,
+  deleteMediaFromCurrentQueue,
+  deleteMediaFromHistoryQueue,
 } from "../services/internal/queueService.js";
 
 export default function QueueController(app) {
@@ -112,6 +114,46 @@ export default function QueueController(app) {
     }
   };
 
+  const deleteFromCurrentQueue = async (req, res) => {
+    const { mediaType, queueId, mediaId } = req.params;
+
+    try {
+      const resultQueue = await deleteMediaFromCurrentQueue(
+        mediaType,
+        queueId,
+        mediaId
+      );
+
+      if ("error" in resultQueue) {
+        throw new Error(resultQueue.error);
+      }
+
+      res.status(200).json(resultQueue);
+    } catch (error) {
+      res.status(500).json({ error: `${error}` });
+    }
+  };
+
+  const deleteFromHistoryQueue = async (req, res) => {
+    const { mediaType, queueId, mediaId } = req.params;
+
+    try {
+      const resultQueue = await deleteMediaFromHistoryQueue(
+        mediaType,
+        queueId,
+        mediaId
+      );
+
+      if ("error" in resultQueue) {
+        throw new Error(resultQueue.error);
+      }
+
+      res.status(200).json(resultQueue);
+    } catch (error) {
+      res.status(500).json({ error: `${error}` });
+    }
+  };
+
   app.get("/api/queue/:mediaType/search", searchMedia);
   app.get("/api/media/:mediaType/:id", getMediaDetails);
   app.get(
@@ -125,5 +167,13 @@ export default function QueueController(app) {
   app.put(
     "/api/queue/:mediaType/:queueId/addToHistory",
     moveFromCurrentToHistory
+  );
+  app.delete(
+    "/api/queue/:mediaType/:queueId/current/:mediaId",
+    deleteFromCurrentQueue
+  );
+  app.delete(
+    "/api/queue/:mediaType/:queueId/history/:mediaId",
+    deleteFromHistoryQueue
   );
 }
