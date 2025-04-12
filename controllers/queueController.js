@@ -5,6 +5,12 @@ import {
   getTVShowById,
 } from "../services/external/tmdbService.js";
 import {
+  searchSpotifyAlbums,
+  getAlbumDetailsFromSpotify,
+  searchSpotifyPodcasts,
+  getPodcastDetailsFromSpotify,
+} from "../services/external/spotifyService.js";
+import {
   getQueueByMediaTypeAndUsername,
   addMediaToQueue,
   moveMediaFromCurrentToHistory,
@@ -36,24 +42,54 @@ export default function QueueController(app) {
     res.json(results);
   };
 
+  const searchAlbums = async (req, res) => {
+    const { query } = req.query;
+    const results = await searchSpotifyAlbums(query);
+    res.json(results);
+  };
+  const getAlbumDetails = async (req, res) => {
+    const { id } = req.params;
+    const results = await getAlbumDetailsFromSpotify(id);
+    res.json(results);
+  };
+
+  const searchPodcasts = async (req, res) => {
+    const { query } = req.query;
+    const results = await searchSpotifyPodcasts(query);
+    res.json(results);
+  }
+  const getPodcastDetails = async (req, res) => {
+    const { id } = req.params;
+    const results = await getPodcastDetailsFromSpotify(id);
+    res.json(results);
+  }
+
   const searchMedia = async (req, res) => {
     const { mediaType } = req.params;
     if (mediaType === "movie") {
       searchMovies(req, res);
     } else if (mediaType === "tv") {
       searchTVShows(req, res);
+    } else if (mediaType === "album") {
+      searchAlbums(req, res);
+    } else if (mediaType === "podcast") {
+      searchPodcasts(req, res);
     } else {
       res.status(400).json({ error: "Invalid media type" });
     }
   };
 
   const getMediaDetails = async (req, res) => {
-    const { mediaType, id } = req.params;
+    const { mediaType } = req.params;
     if (mediaType === "movie") {
       getMovieDetails(req, res);
     } else if (mediaType === "tv") {
       getTVShowDetails(req, res);
-    } else {
+    } else if (mediaType === "album") {
+      getAlbumDetails(req, res);
+    } else if (mediaType === "podcast") {
+      getPodcastDetails(req, res);
+    }else {
       res.status(400).json({ error: "Invalid media type" });
     }
   };
@@ -96,13 +132,13 @@ export default function QueueController(app) {
 
   const moveFromCurrentToHistory = async (req, res) => {
     const { mediaType, queueId } = req.params;
-    const { media } = req.body;
+    const { mediaIDs } = req.body;
 
     try {
       const resultQueue = await moveMediaFromCurrentToHistory(
         mediaType,
         queueId,
-        media
+        mediaIDs
       );
 
       if ("error" in resultQueue) {

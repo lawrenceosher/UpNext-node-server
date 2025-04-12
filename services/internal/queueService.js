@@ -168,12 +168,12 @@ export async function addMediaToQueue(mediaType, queueId, media) {
   return queue;
 }
 
-export async function moveMediaFromCurrentToHistory(mediaType, queueId, media) {
+export async function moveMediaFromCurrentToHistory(mediaType, queueId, mediaIDs) {
   const queue = await QueueModel.findOneAndUpdate(
     { _id: queueId },
     {
-      $pull: { current: media._id },
-      $addToSet: { history: media._id },
+      $pull: { current: { $in: mediaIDs } },
+      $addToSet: { history: { $each: mediaIDs } },
     },
     { new: true }
   )
