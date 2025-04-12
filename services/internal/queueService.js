@@ -1,4 +1,5 @@
 import QueueModel from "../../models/queue.model.js";
+import MovieModel from "../../models/movie.model.js";
 import { v4 as uuidv4 } from "uuid";
 
 export async function createMovieQueue(username, group) {
@@ -83,4 +84,30 @@ export async function createPodcastQueue(username, group) {
   };
 
   return await QueueModel.create(newPodcastQueue);
+}
+
+export async function getQueueByMediaTypeAndUsername(mediaType, username) {
+  const queue = await QueueModel.findOne({
+    mediaType,
+    users: { $in: [username] },
+  });
+  return queue;
+}
+
+export async function addMediaToQueue(mediaType, username, media) {
+  const queue = await QueueModel.findOneAndUpdate(
+    { mediaType, users: { $in: [username] } },
+    { $addToSet: { current: media._id } },
+    { new: true }
+  );
+
+  if (!queue) {
+    throw new Error("Queue not found");
+  }
+
+  if (mediaType === "Movie") {
+    await MovieModel.create(media);
+  }
+
+  return queue;
 }
