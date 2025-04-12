@@ -10,6 +10,7 @@ import {
   moveMediaFromCurrentToHistory,
   deleteMediaFromCurrentQueue,
   deleteMediaFromHistoryQueue,
+  retrieveTop3inCurrentQueue,
 } from "../services/internal/queueService.js";
 
 export default function QueueController(app) {
@@ -154,6 +155,22 @@ export default function QueueController(app) {
     }
   };
 
+  const getTop3InCurrent = async (req, res) => {
+    const { mediaType, username } = req.params;
+
+    try {
+      const resultQueue = await retrieveTop3inCurrentQueue(mediaType, username);
+
+      if ("error" in resultQueue) {
+        throw new Error(resultQueue.error);
+      }
+
+      res.status(200).json(resultQueue);
+    } catch (error) {
+      res.status(500).json({ error: `${error}` });
+    }
+  };
+
   app.get("/api/queue/:mediaType/search", searchMedia);
   app.get("/api/media/:mediaType/:id", getMediaDetails);
   app.get(
@@ -176,4 +193,5 @@ export default function QueueController(app) {
     "/api/queue/:mediaType/:queueId/history/:mediaId",
     deleteFromHistoryQueue
   );
+  app.get("/api/queue/:mediaType/current/:username/top3", getTop3InCurrent);
 }

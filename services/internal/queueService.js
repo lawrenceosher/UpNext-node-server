@@ -100,8 +100,7 @@ export async function addMediaToQueue(mediaType, queueId, media) {
   const currentQueue = await QueueModel.findOne({ _id: queueId });
 
   if (
-    currentQueue &&
-    currentQueue.current.includes(media._id) ||
+    (currentQueue && currentQueue.current.includes(media._id)) ||
     currentQueue.history.includes(media._id)
   ) {
     throw new Error("Media already in queue");
@@ -180,3 +179,20 @@ export async function deleteMediaFromHistoryQueue(mediaType, queueId, mediaId) {
   return queue;
 }
 
+export async function retrieveTop3inCurrentQueue(mediaType, username) {
+  const queue = await QueueModel.findOne(
+    {
+      mediaType,
+      users: { $in: [username] },
+    },
+    { current: { $slice: 3 } }
+  )
+    .populate({ path: "current", model: `${mediaType}Model` })
+    .populate({ path: "history", model: `${mediaType}Model` });
+
+  if (!queue) {
+    throw new Error("Queue not found");
+  }
+
+  return queue;
+}
