@@ -90,13 +90,13 @@ export async function getQueueByMediaTypeAndUsername(mediaType, username) {
   const queue = await QueueModel.findOne({
     mediaType,
     users: { $in: [username] },
-  });
+  }).populate({ path: 'current', model: `${mediaType}Model` });
   return queue;
 }
 
-export async function addMediaToQueue(mediaType, username, media) {
+export async function addMediaToQueue(mediaType, queueId, media) {
   const queue = await QueueModel.findOneAndUpdate(
-    { mediaType, users: { $in: [username] } },
+    { _id: queueId },
     { $addToSet: { current: media._id } },
     { new: true }
   );

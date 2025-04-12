@@ -4,7 +4,7 @@ import {
   getMovieById,
   getTVShowById,
 } from "../services/external/tmdbService.js";
-import { getQueueByMediaTypeAndUsername } from "../services/internal/queueService.js";
+import { getQueueByMediaTypeAndUsername, addMediaToQueue } from "../services/internal/queueService.js";
 
 export default function QueueController(app) {
   const searchMovies = async (req, res) => {
@@ -70,8 +70,25 @@ export default function QueueController(app) {
     }
   };
 
+  const addMediaToExistingQueue = async (req, res) => {
+    const { mediaType, queueId } = req.params;
+    const { media } = req.body;
+
+    try {
+      const resultQueue = await addMediaToQueue(mediaType, queueId, media);
+
+      if ("error" in resultQueue) {
+        throw new Error(resultQueue.error);
+      }
+
+      res.status(200).json(resultQueue);
+    } catch (error) {
+      res.status(500).json({ error: `Error when adding media to queue: ${error}` });
+    }
+  }
+
   app.get("/api/queue/:mediaType/search", searchMedia);
   app.get("/api/media/:mediaType/:id", getMediaDetails);
   app.get("/api/queue/:mediaType/users/:username", fetchQueueByMediaTypeAndUsername);
-  //app.put("/api/queue/:mediaType/addToCurrent");
+  app.put("/api/queue/:mediaType/:queueId/addToCurrent", addMediaToExistingQueue);
 }
