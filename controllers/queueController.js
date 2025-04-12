@@ -83,7 +83,7 @@ export default function QueueController(app) {
 
       res.status(200).json(resultQueue);
     } catch (error) {
-      res.status(500).json({ error: `Error when adding media to queue: ${error}` });
+      res.status(500).json({ error: `${error}` });
     }
   }
 

@@ -95,11 +95,18 @@ export async function getQueueByMediaTypeAndUsername(mediaType, username) {
 }
 
 export async function addMediaToQueue(mediaType, queueId, media) {
+
+  const currentQueue = await QueueModel.findOne({ _id: queueId }).select('current');
+
+  if (currentQueue && currentQueue.current.includes(media._id)) {
+    throw new Error("Media already in queue");
+  }
+
   const queue = await QueueModel.findOneAndUpdate(
     { _id: queueId },
     { $addToSet: { current: media._id } },
     { new: true }
-  );
+  ).populate({ path: 'current', model: `${mediaType}Model` });
 
   if (!queue) {
     throw new Error("Queue not found");
