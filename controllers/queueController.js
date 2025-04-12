@@ -96,13 +96,13 @@ export default function QueueController(app) {
 
   const moveFromCurrentToHistory = async (req, res) => {
     const { mediaType, queueId } = req.params;
-    const { media } = req.body;
+    const { mediaIDs } = req.body;
 
     try {
       const resultQueue = await moveMediaFromCurrentToHistory(
         mediaType,
         queueId,
-        media
+        mediaIDs
       );
 
       if ("error" in resultQueue) {
