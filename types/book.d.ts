@@ -1,4 +1,4 @@
-// Normalized Book type with data aggregated from ISBN Database API
+// Normalized Book type with data aggregated from Google Books API
 export interface Book {
   _id: string;
   title: string;

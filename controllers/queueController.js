@@ -10,6 +10,7 @@ import {
   searchSpotifyPodcasts,
   getPodcastDetailsFromSpotify,
 } from "../services/external/spotifyService.js";
+import { searchIGDBGames, fetchGameById } from "../services/external/igdbService.js";
 import {
   getQueueByMediaTypeAndUsername,
   addMediaToQueue,
@@ -64,6 +65,17 @@ export default function QueueController(app) {
     res.json(results);
   }
 
+  const searchVideoGames = async (req, res) => {
+    const { query } = req.query;
+    const results = await searchIGDBGames(query);
+    res.json(results);
+  };
+  const getVideoGameDetails = async (req, res) => {
+    const { id } = req.params;
+    const results = await fetchGameById(id);
+    res.json(results);
+  };
+
   const searchMedia = async (req, res) => {
     const { mediaType } = req.params;
     if (mediaType === "movie") {
@@ -74,6 +86,8 @@ export default function QueueController(app) {
       searchAlbums(req, res);
     } else if (mediaType === "podcast") {
       searchPodcasts(req, res);
+    } else if (mediaType === "VideoGame") {
+      searchVideoGames(req, res);
     } else {
       res.status(400).json({ error: "Invalid media type" });
     }
@@ -89,7 +103,9 @@ export default function QueueController(app) {
       getAlbumDetails(req, res);
     } else if (mediaType === "podcast") {
       getPodcastDetails(req, res);
-    }else {
+    } else if (mediaType === "VideoGame") {
+      getVideoGameDetails(req, res);
+    } else {
       res.status(400).json({ error: "Invalid media type" });
     }
   };
