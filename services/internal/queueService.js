@@ -116,36 +116,36 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!movie) {
       await MovieModel.create(media);
     }
-  } 
+  }
 
   if (mediaType === "TV") {
     const show = await TVModel.findOne({ _id: media._id });
     if (!show) {
       await TVModel.create(media);
     }
-  } 
+  }
 
   if (mediaType === "Album") {
     const album = await AlbumModel.findOne({ _id: media._id });
     if (!album) {
       await AlbumModel.create(media);
     }
-  } 
-  
+  }
+
   if (mediaType === "Book") {
     const book = await BookModel.findOne({ _id: media._id });
     if (!book) {
       await BookModel.create(media);
     }
-  } 
-  
+  }
+
   if (mediaType === "VideoGame") {
     const videoGames = await VideoGameModel.findOne({ _id: media._id });
     if (!videoGames) {
       await VideoGameModel.create(media);
     }
-  } 
-  
+  }
+
   if (mediaType === "Podcast") {
     const podcasts = await PodcastModel.findOne({ _id: media._id });
     if (!podcasts) {
@@ -168,7 +168,11 @@ export async function addMediaToQueue(mediaType, queueId, media) {
   return queue;
 }
 
-export async function moveMediaFromCurrentToHistory(mediaType, queueId, mediaIDs) {
+export async function moveMediaFromCurrentToHistory(
+  mediaType,
+  queueId,
+  mediaIDs
+) {
   const queue = await QueueModel.findOneAndUpdate(
     { _id: queueId },
     {
@@ -219,16 +223,31 @@ export async function deleteMediaFromHistoryQueue(mediaType, queueId, mediaId) {
   return queue;
 }
 
-export async function retrieveTop3inCurrentQueue(mediaType, username) {
+export async function retrieveTop3inCurrentQueue(mediaType, username, group) {
   const queue = await QueueModel.findOne(
     {
       mediaType,
       users: { $in: [username] },
+      group,
     },
     { current: { $slice: 3 } }
   )
-    .populate({ path: "current", model: `${mediaType}Model` })
-    .populate({ path: "history", model: `${mediaType}Model` });
+    .select("current")
+    .populate({ path: "current", model: `${mediaType}Model` });
+
+  if (!queue) {
+    throw new Error("Queue not found");
+  }
+
+  return queue;
+}
+
+export async function retrieveHistorySummary(mediaType, username, group) {
+  const queue = await QueueModel.findOne({
+    mediaType,
+    users: { $in: [username] },
+    group,
+  }).select("history");
 
   if (!queue) {
     throw new Error("Queue not found");

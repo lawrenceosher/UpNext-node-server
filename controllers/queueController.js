@@ -25,6 +25,7 @@ import {
   deleteMediaFromCurrentQueue,
   deleteMediaFromHistoryQueue,
   retrieveTop3inCurrentQueue,
+  retrieveHistorySummary,
 } from "../services/internal/queueService.js";
 
 export default function QueueController(app) {
@@ -230,20 +231,65 @@ export default function QueueController(app) {
   };
 
   const getTop3InCurrent = async (req, res) => {
-    const { mediaType, username } = req.params;
+    const { username } = req.params;
 
     try {
-      const resultQueue = await retrieveTop3inCurrentQueue(mediaType, username);
+      const movieQueue = await retrieveTop3inCurrentQueue("Movie", username, null);
+      const tvQueue = await retrieveTop3inCurrentQueue("TV", username, null);
+      const albumQueue = await retrieveTop3inCurrentQueue("Album", username, null);
+      const podcastQueue = await retrieveTop3inCurrentQueue("Podcast", username, null);
+      const gameQueue = await retrieveTop3inCurrentQueue("VideoGame", username, null);
+      const bookQueue = await retrieveTop3inCurrentQueue("Book", username, null);
 
-      if ("error" in resultQueue) {
-        throw new Error(resultQueue.error);
+      const resultSummary = {
+        movie: movieQueue,
+        tv: tvQueue,
+        album: albumQueue,
+        podcast: podcastQueue,
+        game: gameQueue,
+        book: bookQueue,
+      };
+
+      if ("error" in resultSummary) {
+        throw new Error(resultSummary.error);
       }
 
-      res.status(200).json(resultQueue);
+      res.status(200).json(resultSummary);
     } catch (error) {
       res.status(500).json({ error: `${error}` });
     }
   };
+
+  const getPersonalHistorySummary = async (req, res) => {
+    const { username } = req.params;
+
+    try {
+      const movieQueue = await retrieveHistorySummary("Movie", username, null);
+      const tvQueue = await retrieveHistorySummary("TV", username, null);
+      const albumQueue = await retrieveHistorySummary("Album", username, null);
+      const podcastQueue = await retrieveHistorySummary("Podcast", username, null);
+      const gameQueue = await retrieveHistorySummary("VideoGame", username, null);
+      const bookQueue = await retrieveHistorySummary("Book", username, null);
+      
+      const resultSummary = {
+        movie: movieQueue.history.length,
+        tv: tvQueue.history.length,
+        album: albumQueue.history.length,
+        podcast: podcastQueue.history.length,
+        game: gameQueue.history.length,
+        book: bookQueue.history.length,
+      };
+
+      if ("error" in resultSummary) {
+        throw new Error(resultSummary.error);
+      }
+
+      res.status(200).json(resultSummary);
+    } catch (error) {
+      res.status(500).json({ error: `${error}` });
+    }
+
+  }
 
   app.get("/api/queue/:mediaType/search", searchMedia);
   app.get("/api/media/:mediaType/:id", getMediaDetails);
@@ -267,5 +313,6 @@ export default function QueueController(app) {
     "/api/queue/:mediaType/:queueId/history/:mediaId",
     deleteFromHistoryQueue
   );
-  app.get("/api/queue/:mediaType/current/:username/top3", getTop3InCurrent);
+  app.get("/api/queue/current/:username/top3", getTop3InCurrent);
+  app.get("/api/queue/history/:username", getPersonalHistorySummary)
 }
