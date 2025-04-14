@@ -1,4 +1,11 @@
-import { createMovieQueue, createTVQueue, createAlbumQueue, createBookQueue, createVideoGameQueue, createPodcastQueue } from "../services/internal/queueService.js";
+import {
+  createMovieQueue,
+  createTVQueue,
+  createAlbumQueue,
+  createBookQueue,
+  createVideoGameQueue,
+  createPodcastQueue,
+} from "../services/internal/queueService.js";
 import {
   saveUser,
   loginUser,
@@ -62,11 +69,17 @@ const UserController = (app) => {
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
-      const videoGameQueueResult = await createVideoGameQueue(newUser.username, null);
+      const videoGameQueueResult = await createVideoGameQueue(
+        newUser.username,
+        null
+      );
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
-      const podcastQueueResult = await createPodcastQueue(newUser.username, null);
+      const podcastQueueResult = await createPodcastQueue(
+        newUser.username,
+        null
+      );
       if ("error" in podcastQueueResult) {
         throw new Error(podcastQueueResult.error);
       }
@@ -160,6 +173,9 @@ const UserController = (app) => {
       if ("error" in updatedUser) {
         throw Error(updatedUser.error);
       }
+
+      const currentUser = await findUserById(userId);
+      req.session["currentUser"] = currentUser;
 
       res.status(200).json(updatedUser);
     } catch (error) {
