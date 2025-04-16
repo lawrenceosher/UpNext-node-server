@@ -26,7 +26,9 @@ import {
   deleteMediaFromHistoryQueue,
   retrieveTop3inCurrentQueue,
   retrieveHistorySummary,
+  findQueuesWithMedia,
 } from "../services/internal/queueService.js";
+import { findUserByUsername } from "../services/internal/userService.js";
 
 export default function QueueController(app) {
   const searchMovies = async (req, res) => {
@@ -291,6 +293,29 @@ export default function QueueController(app) {
 
   }
 
+  const getUsersWithSameMedia = async (req, res) => {
+    const { mediaType, mediaId } = req.params;
+
+    try {
+      const users = await findQueuesWithMedia(
+        mediaType,
+        mediaId
+      );
+
+      if ("error" in users) {
+        throw new Error(users.error);
+      }
+
+      const resultUsers = await Promise.all(users.map(async (username) => {
+        return await findUserByUsername(username);
+      }));
+
+      res.status(200).json(resultUsers);
+    } catch (error) {
+      res.status(500).json({ error: `${error}` });
+    }
+  };
+
   app.get("/api/queue/:mediaType/search", searchMedia);
   app.get("/api/media/:mediaType/:id", getMediaDetails);
   app.get(
@@ -314,5 +339,6 @@ export default function QueueController(app) {
     deleteFromHistoryQueue
   );
   app.get("/api/queue/current/:username/top3", getTop3InCurrent);
-  app.get("/api/queue/history/:username", getPersonalHistorySummary)
+  app.get("/api/queue/history/:username", getPersonalHistorySummary);
+  app.get("/api/queue/:mediaType/:mediaId/users", getUsersWithSameMedia);
 }

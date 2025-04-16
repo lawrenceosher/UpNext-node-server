@@ -28,9 +28,11 @@ export const saveUser = async (user) => {
 
 export const findUserByUsername = async (username) => {
   try {
-    const user = await UserModel.findOne({ username: username }).select(
-      "-password"
-    );
+    const user = await UserModel.findOne({ username: username })
+      .select("-password")
+      .select("-firstName")
+      .select("-lastName")
+      .select("-email");
 
     return user;
   } catch (error) {

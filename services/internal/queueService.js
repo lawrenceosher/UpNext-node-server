@@ -255,3 +255,16 @@ export async function retrieveHistorySummary(mediaType, username, group) {
 
   return queue;
 }
+
+export async function findQueuesWithMedia(mediaType, mediaId) {
+  const users = await QueueModel.find({
+    mediaType,
+    current: { $in: [mediaId] },
+  }).distinct("users");
+
+  if (!users) {
+    throw new Error("Queues not found");
+  }
+
+  return users;
+}
