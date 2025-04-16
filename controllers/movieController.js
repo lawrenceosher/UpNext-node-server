@@ -6,5 +6,5 @@ export default function MovieController(app) {
     res.json(results);
   };
 
-  app.get("/api/movies", getPopularMovies);
+  app.get("/api/movies/popular", getPopularMovies);
 }
