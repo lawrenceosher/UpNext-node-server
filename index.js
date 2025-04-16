@@ -7,8 +7,13 @@ import QueueController from "./controllers/queueController.js";
 import UserController from "./controllers/userController.js";
 import MovieController from "./controllers/movieController.js";
 import TVController from "./controllers/tvController.js";
+import AlbumController from "./controllers/albumController.js";
+import BookController from "./controllers/bookController.js";
+import PodcastController from "./controllers/podcastController.js";
+import GameController from "./controllers/gameController.js";
 
-const CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/upnext"
+const CONNECTION_STRING =
+  process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/upnext";
 mongoose.connect(CONNECTION_STRING);
 const app = express();
 app.use(
@@ -32,8 +37,8 @@ if (process.env.NODE_ENV !== "development") {
 }
 app.use(session(sessionOptions));
 app.use(express.json());
-app.get('/', (req, res) => {
-  res.send('hello world');
+app.get("/", (req, res) => {
+  res.send("hello world");
   res.end();
 });
 
@@ -41,6 +46,10 @@ QueueController(app);
 UserController(app);
 MovieController(app);
 TVController(app);
+AlbumController(app);
+BookController(app);
+PodcastController(app);
+GameController(app);
 
 app.listen(process.env.PORT || 4000);
 console.log("Server running on port", process.env.PORT || 4000);
