@@ -28,8 +28,9 @@ const movieSchema = new Schema(
     genres: [{ type: String }],
     runtime: Number,
     sourceUrl: String,
+    numQueues: { type: Number, default: 0 },
   },
-  { collection: "Movie" }
+  { collection: "Movie" },
 );
 
 export default movieSchema;

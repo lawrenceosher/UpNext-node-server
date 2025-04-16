@@ -116,6 +116,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!movie) {
       await MovieModel.create(media);
     }
+    await MovieModel.findOneAndUpdate(
+      { _id: media._id },
+      { $inc: { numQueues: 1 } }
+    );
   }
 
   if (mediaType === "TV") {
@@ -123,6 +127,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!show) {
       await TVModel.create(media);
     }
+    await TVModel.findOneAndUpdate(
+      { _id: media._id },
+      { $inc: { numQueues: 1 } }
+    );
   }
 
   if (mediaType === "Album") {
@@ -130,6 +138,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!album) {
       await AlbumModel.create(media);
     }
+    await AlbumModel.findOneAndUpdate(
+      { _id: media._id },
+      { $inc: { numQueues: 1 } }
+    );
   }
 
   if (mediaType === "Book") {
@@ -137,6 +149,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!book) {
       await BookModel.create(media);
     }
+    await BookModel.findOneAndUpdate(
+      { _id: media._id },
+      { $inc: { numQueues: 1 } }
+    );
   }
 
   if (mediaType === "VideoGame") {
@@ -144,6 +160,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!videoGames) {
       await VideoGameModel.create(media);
     }
+    await VideoGameModel.findOneAndUpdate(
+      { _id: media._id },
+      { $inc: { numQueues: 1 } }
+    );
   }
 
   if (mediaType === "Podcast") {
@@ -151,6 +171,10 @@ export async function addMediaToQueue(mediaType, queueId, media) {
     if (!podcasts) {
       await PodcastModel.create(media);
     }
+    await PodcastModel.findOneAndUpdate(
+      { _id: media._id },
+      { $inc: { numQueues: 1 } }
+    );
   }
 
   const queue = await QueueModel.findOneAndUpdate(
@@ -204,6 +228,48 @@ export async function deleteMediaFromCurrentQueue(mediaType, queueId, mediaId) {
     throw new Error("Queue not found");
   }
 
+  if (mediaType === "Movie") {
+    await MovieModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "TV") {
+    await TVModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Album") {
+    await AlbumModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Book") {
+    await BookModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "VideoGame") {
+    await VideoGameModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Podcast") {
+    await PodcastModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
   return queue;
 }
 
@@ -218,6 +284,48 @@ export async function deleteMediaFromHistoryQueue(mediaType, queueId, mediaId) {
 
   if (!queue) {
     throw new Error("Queue not found");
+  }
+
+  if (mediaType === "Movie") {
+    await MovieModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "TV") {
+    await TVModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Album") {
+    await AlbumModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Book") {
+    await BookModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "VideoGame") {
+    await VideoGameModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Podcast") {
+    await PodcastModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
   }
 
   return queue;

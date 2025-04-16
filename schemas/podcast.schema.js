@@ -25,6 +25,7 @@ const podcastSchema = new Schema(
     latestEpisodeDate: String,
     episodes: [{ type: String }],
     sourceUrl: String,
+    numQueues: { type: Number, default: 0 },
   },
   { collection: "Podcast" }
 );

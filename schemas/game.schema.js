@@ -27,6 +27,7 @@ const videoGameSchema = new Schema(
     companies: [{ type: String }],
     platforms: [{ type: String }],
     sourceUrl: String,
+    numQueues: { type: Number, default: 0 },
   },
   { collection: "Video Game" }
 );

@@ -33,6 +33,7 @@ const tvSchema = new Schema(
     totalEpisodes: Number,
     totalSeasons: Number,
     sourceUrl: String,
+    numQueues: { type: Number, default: 0 },
   },
   { collection: "TV" }
 );

@@ -25,6 +25,7 @@ const albumSchema = new Schema(
     releaseDate: String,
     tracks: [{ type: String }],
     sourceUrl: String,
+    numQueues: { type: Number, default: 0 },
   },
   { collection: "Album" }
 );

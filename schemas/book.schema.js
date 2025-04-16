@@ -27,6 +27,7 @@ const bookSchema = new Schema(
     datePublished: String,
     pages: Number,
     sourceUrl: String,
+    numQueues: { type: Number, default: 0 },
   },
   { collection: "Book" }
 );
