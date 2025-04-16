@@ -97,13 +97,13 @@ export default function QueueController(app) {
 
   const searchMedia = async (req, res) => {
     const { mediaType } = req.params;
-    if (mediaType === "movie") {
+    if (mediaType === "Movie") {
       searchMovies(req, res);
-    } else if (mediaType === "tv") {
+    } else if (mediaType === "TV") {
       searchTVShows(req, res);
-    } else if (mediaType === "album") {
+    } else if (mediaType === "Album") {
       searchAlbums(req, res);
-    } else if (mediaType === "podcast") {
+    } else if (mediaType === "Podcast") {
       searchPodcasts(req, res);
     } else if (mediaType === "VideoGame") {
       searchVideoGames(req, res);
@@ -116,13 +116,13 @@ export default function QueueController(app) {
 
   const getMediaDetails = async (req, res) => {
     const { mediaType } = req.params;
-    if (mediaType === "movie") {
+    if (mediaType === "Movie") {
       getMovieDetails(req, res);
-    } else if (mediaType === "tv") {
+    } else if (mediaType === "TV") {
       getTVShowDetails(req, res);
-    } else if (mediaType === "album") {
+    } else if (mediaType === "Album") {
       getAlbumDetails(req, res);
-    } else if (mediaType === "podcast") {
+    } else if (mediaType === "Podcast") {
       getPodcastDetails(req, res);
     } else if (mediaType === "VideoGame") {
       getVideoGameDetails(req, res);
