@@ -91,10 +91,15 @@ export async function createPodcastQueue(username, group) {
   return await QueueModel.create(newPodcastQueue);
 }
 
-export async function getQueueByMediaTypeAndUsername(mediaType, username) {
+export async function getQueueByMediaTypeAndUsernameAndGroup(
+  mediaType,
+  username,
+  group
+) {
   const queue = await QueueModel.findOne({
     mediaType,
     users: { $in: [username] },
+    group,
   })
     .populate({ path: "current", model: `${mediaType}Model` })
     .populate({ path: "history", model: `${mediaType}Model` });

@@ -19,7 +19,7 @@ import {
   fetchGoogleBookById,
 } from "../services/external/googleBooksService.js";
 import {
-  getQueueByMediaTypeAndUsername,
+  getQueueByMediaTypeAndUsernameAndGroup,
   addMediaToQueue,
   moveMediaFromCurrentToHistory,
   deleteMediaFromCurrentQueue,
@@ -137,11 +137,13 @@ export default function QueueController(app) {
 
   const fetchQueueByMediaTypeAndUsername = async (req, res) => {
     const { mediaType, username } = req.params;
+    const { group } = req.query;
 
     try {
-      const resultQueue = await getQueueByMediaTypeAndUsername(
+      const resultQueue = await getQueueByMediaTypeAndUsernameAndGroup(
         mediaType,
-        username
+        username,
+        group
       );
 
       if ("error" in resultQueue) {
@@ -236,12 +238,32 @@ export default function QueueController(app) {
     const { username } = req.params;
 
     try {
-      const movieQueue = await retrieveTop3inCurrentQueue("Movie", username, null);
+      const movieQueue = await retrieveTop3inCurrentQueue(
+        "Movie",
+        username,
+        null
+      );
       const tvQueue = await retrieveTop3inCurrentQueue("TV", username, null);
-      const albumQueue = await retrieveTop3inCurrentQueue("Album", username, null);
-      const podcastQueue = await retrieveTop3inCurrentQueue("Podcast", username, null);
-      const gameQueue = await retrieveTop3inCurrentQueue("VideoGame", username, null);
-      const bookQueue = await retrieveTop3inCurrentQueue("Book", username, null);
+      const albumQueue = await retrieveTop3inCurrentQueue(
+        "Album",
+        username,
+        null
+      );
+      const podcastQueue = await retrieveTop3inCurrentQueue(
+        "Podcast",
+        username,
+        null
+      );
+      const gameQueue = await retrieveTop3inCurrentQueue(
+        "VideoGame",
+        username,
+        null
+      );
+      const bookQueue = await retrieveTop3inCurrentQueue(
+        "Book",
+        username,
+        null
+      );
 
       const resultSummary = {
         movie: movieQueue,
@@ -269,10 +291,18 @@ export default function QueueController(app) {
       const movieQueue = await retrieveHistorySummary("Movie", username, null);
       const tvQueue = await retrieveHistorySummary("TV", username, null);
       const albumQueue = await retrieveHistorySummary("Album", username, null);
-      const podcastQueue = await retrieveHistorySummary("Podcast", username, null);
-      const gameQueue = await retrieveHistorySummary("VideoGame", username, null);
+      const podcastQueue = await retrieveHistorySummary(
+        "Podcast",
+        username,
+        null
+      );
+      const gameQueue = await retrieveHistorySummary(
+        "VideoGame",
+        username,
+        null
+      );
       const bookQueue = await retrieveHistorySummary("Book", username, null);
-      
+
       const resultSummary = {
         movie: movieQueue.history.length,
         tv: tvQueue.history.length,
@@ -290,25 +320,23 @@ export default function QueueController(app) {
     } catch (error) {
       res.status(500).json({ error: `${error}` });
     }
-
-  }
+  };
 
   const getUsersWithSameMedia = async (req, res) => {
     const { mediaType, mediaId } = req.params;
 
     try {
-      const users = await findQueuesWithMedia(
-        mediaType,
-        mediaId
-      );
+      const users = await findQueuesWithMedia(mediaType, mediaId);
 
       if ("error" in users) {
         throw new Error(users.error);
       }
 
-      const resultUsers = await Promise.all(users.map(async (username) => {
-        return await findUserByUsername(username);
-      }));
+      const resultUsers = await Promise.all(
+        users.map(async (username) => {
+          return await findUserByUsername(username);
+        })
+      );
 
       res.status(200).json(resultUsers);
     } catch (error) {
