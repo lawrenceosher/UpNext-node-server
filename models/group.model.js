@@ -1,6 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import groupSchema from '../schemas/group.schema';
-import { Group } from '../types/group';
+import groupSchema from '../schemas/group.schema.js';
 
 /**
  * Mongoose model for the `Group` collection.
@@ -9,8 +8,7 @@ import { Group } from '../types/group';
  * `Group` collection in the MongoDB database, and provides an interface for interacting with
  * the stored groups.
  *
- * @type {Model<Group>}
  */
-const GroupModel = mongoose.model<Group>('GroupModel', groupSchema);
+const GroupModel = mongoose.model('GroupModel', groupSchema);
 
 export default GroupModel;
