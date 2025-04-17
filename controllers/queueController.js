@@ -152,7 +152,7 @@ export default function QueueController(app) {
 
       res.status(200).json(resultQueue);
     } catch (error) {
-      res.status(500).json({ error: `Error when saving user: ${error}` });
+      res.status(500).json({ error: `Error when fetching queue: ${error}` });
     }
   };
 
