@@ -17,9 +17,9 @@ import {
 
 export default function GroupController(app) {
   const createNewGroup = async (req, res) => {
-    const { usernames, groupName } = req.body;
+    const { users, groupName } = req.body;
     try {
-      const newGroup = await createGroup(usernames, groupName);
+      const newGroup = await createGroup(users, groupName);
 
       // Create the new queues for the group
       const movieQueueResult = await createMovieQueue(

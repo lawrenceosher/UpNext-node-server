@@ -143,7 +143,7 @@ export default function QueueController(app) {
       const resultQueue = await getQueueByMediaTypeAndUsernameAndGroup(
         mediaType,
         username,
-        group
+        group === '' ? null : group
       );
 
       if ("error" in resultQueue) {
