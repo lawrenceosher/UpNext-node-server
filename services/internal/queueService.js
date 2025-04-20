@@ -11,7 +11,7 @@ export async function createMovieQueue(usernames, group) {
   const newMovieQueue = {
     _id: uuidv4(),
     mediaType: "Movie",
-    users: [...usernames],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -25,7 +25,7 @@ export async function createTVQueue(usernames, group) {
   const newTVQueue = {
     _id: uuidv4(),
     mediaType: "TV",
-    users: [...usernames],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -39,7 +39,7 @@ export async function createAlbumQueue(usernames, group) {
   const newAlbumQueue = {
     _id: uuidv4(),
     mediaType: "Album",
-    users: [...usernames],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -53,7 +53,7 @@ export async function createBookQueue(usernames, group) {
   const newBookQueue = {
     _id: uuidv4(),
     mediaType: "Book",
-    users: [...usernames],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -67,7 +67,7 @@ export async function createVideoGameQueue(usernames, group) {
   const newVideoGameQueue = {
     _id: uuidv4(),
     mediaType: "VideoGame",
-    users: [...usernames],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -81,7 +81,7 @@ export async function createPodcastQueue(usernames, group) {
   const newPodcastQueue = {
     _id: uuidv4(),
     mediaType: "Podcast",
-    users: [...usernames],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -380,4 +380,17 @@ export async function findQueuesWithMedia(mediaType, mediaId) {
   }
 
   return users;
+}
+
+export async function deleteQueueByMediaTypeAndGroup(mediaType, group) {
+  const deletedQueues = await QueueModel.deleteMany({
+    mediaType,
+    group,
+  });
+
+  if (!deletedQueues) {
+    throw new Error("Queue not found");
+  }
+
+  return deletedQueues;
 }

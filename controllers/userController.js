@@ -53,31 +53,31 @@ const UserController = (app) => {
       }
 
       // Create the new queues for the user
-      const movieQueueResult = await createMovieQueue(newUser.username, null);
+      const movieQueueResult = await createMovieQueue(result.username, null);
       if ("error" in movieQueueResult) {
         throw new Error(movieQueueResult.error);
       }
-      const tvQueueResult = await createTVQueue(newUser.username, null);
+      const tvQueueResult = await createTVQueue(result.username, null);
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
-      const albumQueueResult = await createAlbumQueue(newUser.username, null);
+      const albumQueueResult = await createAlbumQueue(result.username, null);
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
-      const bookQueueResult = await createBookQueue(newUser.username, null);
+      const bookQueueResult = await createBookQueue(result.username, null);
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
       const videoGameQueueResult = await createVideoGameQueue(
-        newUser.username,
+        result.username,
         null
       );
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
       const podcastQueueResult = await createPodcastQueue(
-        newUser.username,
+        result.username,
         null
       );
       if ("error" in podcastQueueResult) {
