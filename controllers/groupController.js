@@ -15,8 +15,6 @@ export default function GroupController(app) {
     try {
       const newGroup = await createGroup(usernames, groupName);
 
-      console.log(newGroup.users);
-
       // Create the new queues for the group
       const movieQueueResult = await createMovieQueue(
         [...newGroup.users],
@@ -24,7 +22,6 @@ export default function GroupController(app) {
       );
      
       if ("error" in movieQueueResult) {
-        console.log(movieQueueResult.error);
         throw new Error(movieQueueResult.error);
       }
       const tvQueueResult = await createTVQueue([...newGroup.users], newGroup._id);
