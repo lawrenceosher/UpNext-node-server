@@ -394,3 +394,21 @@ export async function deleteQueueByMediaTypeAndGroup(mediaType, group) {
 
   return deletedQueues;
 }
+
+export async function deleteQueueByMediaTypeAndUsernameAndGroup(
+  mediaType,
+  username,
+  group
+) {
+  const deletedQueues = await QueueModel.deleteMany({
+    mediaType,
+    users: { $in: [username] },
+    group,
+  });
+
+  if (!deletedQueues) {
+    throw new Error("Queue not found");
+  }
+
+  return deletedQueues;
+}

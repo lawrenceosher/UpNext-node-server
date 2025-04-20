@@ -5,6 +5,7 @@ import {
   createBookQueue,
   createVideoGameQueue,
   createPodcastQueue,
+  deleteQueueByMediaTypeAndUsernameAndGroup,
 } from "../services/internal/queueService.js";
 import {
   saveUser,
@@ -156,9 +157,65 @@ const UserController = (app) => {
         throw Error(deletedUser.error);
       }
 
+      // Delete the corresponding personal queues for user
+      const movieQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
+        "Movie",
+        deletedUser.username,
+        null
+      );
+      if ("error" in movieQueueResult) {
+        throw new Error(movieQueueResult.error);
+      }
+      const tvQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
+        "TV",
+        deletedUser.username,
+        null
+      );
+      if ("error" in tvQueueResult) {
+        throw new Error(tvQueueResult.error);
+      }
+      const albumQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
+        "Album",
+        deletedUser.username,
+        null
+      );
+      if ("error" in albumQueueResult) {
+        throw new Error(albumQueueResult.error);
+      }
+      const bookQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
+        "Book",
+        deletedUser.username,
+        null
+      );
+      if ("error" in bookQueueResult) {
+        throw new Error(bookQueueResult.error);
+      }
+      const videoGameQueueResult =
+        await deleteQueueByMediaTypeAndUsernameAndGroup(
+          "VideoGame",
+          deletedUser.username,
+          null
+        );
+      if ("error" in videoGameQueueResult) {
+        throw new Error(videoGameQueueResult.error);
+      }
+      const podcastQueueResult =
+        await deleteQueueByMediaTypeAndUsernameAndGroup(
+          "Podcast",
+          deletedUser.username,
+          null
+        );
+      if ("error" in podcastQueueResult) {
+        throw new Error(podcastQueueResult.error);
+      }
+
       res.status(200).json(deletedUser);
     } catch (error) {
-      res.status(500).send(`Error when deleting user by id: ${error}`);
+      res
+        .status(500)
+        .send(
+          `Error when deleting user by id and its corresponding queues: ${error}`
+        );
     }
   };
 
