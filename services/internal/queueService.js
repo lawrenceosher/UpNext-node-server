@@ -7,11 +7,11 @@ import VideoGameModel from "../../models/game.model.js";
 import PodcastModel from "../../models/podcast.model.js";
 import { v4 as uuidv4 } from "uuid";
 
-export async function createMovieQueue(username, group) {
+export async function createMovieQueue(usernames, group) {
   const newMovieQueue = {
     _id: uuidv4(),
     mediaType: "Movie",
-    users: [username],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -21,11 +21,11 @@ export async function createMovieQueue(username, group) {
   return await QueueModel.create(newMovieQueue);
 }
 
-export async function createTVQueue(username, group) {
+export async function createTVQueue(usernames, group) {
   const newTVQueue = {
     _id: uuidv4(),
     mediaType: "TV",
-    users: [username],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -35,11 +35,11 @@ export async function createTVQueue(username, group) {
   return await QueueModel.create(newTVQueue);
 }
 
-export async function createAlbumQueue(username, group) {
+export async function createAlbumQueue(usernames, group) {
   const newAlbumQueue = {
     _id: uuidv4(),
     mediaType: "Album",
-    users: [username],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -49,11 +49,11 @@ export async function createAlbumQueue(username, group) {
   return await QueueModel.create(newAlbumQueue);
 }
 
-export async function createBookQueue(username, group) {
+export async function createBookQueue(usernames, group) {
   const newBookQueue = {
     _id: uuidv4(),
     mediaType: "Book",
-    users: [username],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -63,11 +63,11 @@ export async function createBookQueue(username, group) {
   return await QueueModel.create(newBookQueue);
 }
 
-export async function createVideoGameQueue(username, group) {
+export async function createVideoGameQueue(usernames, group) {
   const newVideoGameQueue = {
     _id: uuidv4(),
     mediaType: "VideoGame",
-    users: [username],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -77,11 +77,11 @@ export async function createVideoGameQueue(username, group) {
   return await QueueModel.create(newVideoGameQueue);
 }
 
-export async function createPodcastQueue(username, group) {
+export async function createPodcastQueue(usernames, group) {
   const newPodcastQueue = {
     _id: uuidv4(),
     mediaType: "Podcast",
-    users: [username],
+    users: Array.isArray(usernames) ? [...usernames] : [usernames],
     group,
     current: [],
     history: [],
@@ -91,10 +91,15 @@ export async function createPodcastQueue(username, group) {
   return await QueueModel.create(newPodcastQueue);
 }
 
-export async function getQueueByMediaTypeAndUsername(mediaType, username) {
+export async function getQueueByMediaTypeAndUsernameAndGroup(
+  mediaType,
+  username,
+  group
+) {
   const queue = await QueueModel.findOne({
     mediaType,
     users: { $in: [username] },
+    group,
   })
     .populate({ path: "current", model: `${mediaType}Model` })
     .populate({ path: "history", model: `${mediaType}Model` });
@@ -375,4 +380,17 @@ export async function findQueuesWithMedia(mediaType, mediaId) {
   }
 
   return users;
+}
+
+export async function deleteQueueByMediaTypeAndGroup(mediaType, group) {
+  const deletedQueues = await QueueModel.deleteMany({
+    mediaType,
+    group,
+  });
+
+  if (!deletedQueues) {
+    throw new Error("Queue not found");
+  }
+
+  return deletedQueues;
 }

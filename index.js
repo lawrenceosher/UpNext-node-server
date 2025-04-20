@@ -11,6 +11,7 @@ import AlbumController from "./controllers/albumController.js";
 import BookController from "./controllers/bookController.js";
 import PodcastController from "./controllers/podcastController.js";
 import GameController from "./controllers/gameController.js";
+import GroupController from "./controllers/groupController.js";
 
 const CONNECTION_STRING =
   process.env.MONGO_CONNECTION_STRING || "mongodb://127.0.0.1:27017/upnext";
@@ -50,6 +51,7 @@ AlbumController(app);
 BookController(app);
 PodcastController(app);
 GameController(app);
+GroupController(app);
 
 app.listen(process.env.PORT || 4000);
 console.log("Server running on port", process.env.PORT || 4000);
