@@ -3,6 +3,7 @@ import {
   getAllGroupsForUser,
   deleteGroup,
   getAllGroups,
+  updateGroup,
 } from "../services/internal/groupService.js";
 import {
   createMovieQueue,
@@ -137,8 +138,23 @@ export default function GroupController(app) {
     return res.status(200).json(groups);
   };
 
+  const updateGroupById = async (req, res) => {
+    const { groupId } = req.params;
+    const groupUpdates = req.body;
+    try {
+      const updatedGroup = await updateGroup(groupId, groupUpdates);
+      if (!updatedGroup) {
+        return res.status(404).json({ error: "Group not found" });
+      }
+      return res.status(200).json(updatedGroup);
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to update group" });
+    }
+  };
+
   app.post("/api/groups", createNewGroup);
   app.get("/api/groups/:username", retrieveAllGroupsForUser);
   app.delete("/api/groups/:groupId", deleteGroupById);
   app.get("/api/groups", retrieveAllGroups);
+  app.put("/api/groups/:groupId", updateGroupById);
 }
