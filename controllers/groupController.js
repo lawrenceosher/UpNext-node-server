@@ -1,4 +1,9 @@
-import { createGroup, getAllGroupsForUser, deleteGroup } from "../services/internal/groupService.js";
+import {
+  createGroup,
+  getAllGroupsForUser,
+  deleteGroup,
+  getAllGroups,
+} from "../services/internal/groupService.js";
 import {
   createMovieQueue,
   createTVQueue,
@@ -6,7 +11,7 @@ import {
   createBookQueue,
   createVideoGameQueue,
   createPodcastQueue,
-  deleteQueueByMediaTypeAndGroup
+  deleteQueueByMediaTypeAndGroup,
 } from "../services/internal/queueService.js";
 
 export default function GroupController(app) {
@@ -20,11 +25,14 @@ export default function GroupController(app) {
         [...newGroup.users],
         newGroup._id
       );
-     
+
       if ("error" in movieQueueResult) {
         throw new Error(movieQueueResult.error);
       }
-      const tvQueueResult = await createTVQueue([...newGroup.users], newGroup._id);
+      const tvQueueResult = await createTVQueue(
+        [...newGroup.users],
+        newGroup._id
+      );
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
@@ -80,24 +88,57 @@ export default function GroupController(app) {
       }
 
       // Delete the associated queues
-      const deletedMovieQueue = await deleteQueueByMediaTypeAndGroup("Movie", deletedGroup._id);
-      const deletedTVQueue = await deleteQueueByMediaTypeAndGroup("TV", deletedGroup._id);
-      const deletedAlbumQueue = await deleteQueueByMediaTypeAndGroup("Album", deletedGroup._id);
-      const deletedBookQueue = await deleteQueueByMediaTypeAndGroup("Book", deletedGroup._id);
-      const deletedVideoGameQueue = await deleteQueueByMediaTypeAndGroup("VideoGame", deletedGroup._id);
-      const deletedPodcastQueue = await deleteQueueByMediaTypeAndGroup("Podcast", deletedGroup._id);
+      const deletedMovieQueue = await deleteQueueByMediaTypeAndGroup(
+        "Movie",
+        deletedGroup._id
+      );
+      const deletedTVQueue = await deleteQueueByMediaTypeAndGroup(
+        "TV",
+        deletedGroup._id
+      );
+      const deletedAlbumQueue = await deleteQueueByMediaTypeAndGroup(
+        "Album",
+        deletedGroup._id
+      );
+      const deletedBookQueue = await deleteQueueByMediaTypeAndGroup(
+        "Book",
+        deletedGroup._id
+      );
+      const deletedVideoGameQueue = await deleteQueueByMediaTypeAndGroup(
+        "VideoGame",
+        deletedGroup._id
+      );
+      const deletedPodcastQueue = await deleteQueueByMediaTypeAndGroup(
+        "Podcast",
+        deletedGroup._id
+      );
 
-      if (!deletedMovieQueue || !deletedTVQueue || !deletedAlbumQueue || !deletedBookQueue || !deletedVideoGameQueue || !deletedPodcastQueue) {
-        return res.status(500).json({ error: "Failed to delete associated queues" });
+      if (
+        !deletedMovieQueue ||
+        !deletedTVQueue ||
+        !deletedAlbumQueue ||
+        !deletedBookQueue ||
+        !deletedVideoGameQueue ||
+        !deletedPodcastQueue
+      ) {
+        return res
+          .status(500)
+          .json({ error: "Failed to delete associated queues" });
       }
 
       return res.status(200).json(deletedGroup);
     } catch (error) {
       return res.status(500).json({ error: "Failed to delete group" });
     }
-  }
+  };
+
+  const retrieveAllGroups = async (req, res) => {
+    const groups = await getAllGroups();
+    return res.status(200).json(groups);
+  };
 
   app.post("/api/groups", createNewGroup);
   app.get("/api/groups/:username", retrieveAllGroupsForUser);
   app.delete("/api/groups/:groupId", deleteGroupById);
+  app.get("/api/groups", retrieveAllGroups);
 }

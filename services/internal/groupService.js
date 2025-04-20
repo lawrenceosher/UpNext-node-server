@@ -11,8 +11,13 @@ export async function createGroup(usernames, groupName) {
   return await GroupModel.create(newGroup);
 }
 
+export async function getAllGroups() {
+  const groups = await GroupModel.find({});
+  return groups;
+}
+
 export async function getAllGroupsForUser(username) {
-  const groups = await GroupModel.find({ users: { $in: [username] }, });
+  const groups = await GroupModel.find({ users: { $in: [username] } });
   return groups;
 }
 
