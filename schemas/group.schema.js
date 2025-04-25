@@ -7,14 +7,19 @@ import { Schema } from "mongoose";
  * This schema defines the structure for storing groups in the database.
  * Each Group includes the following fields:
  * - `_id`: The unique id of the group (not managed by MongoDB)
- * - `groupName`: The name of the group
- * - `users`: The users part of the group
+ * - `name`: The name of the group
+ * - `creator`: The user who created the group
+ * - `members`: The members part of the group
  */
 const groupSchema = new Schema(
   {
     _id: String,
-    groupName: String,
-    users: [
+    name: String,
+    creator: {
+      type: String,
+      ref: "UserModel",
+    },
+    members: [
       {
         type: String,
         ref: "UserModel",
