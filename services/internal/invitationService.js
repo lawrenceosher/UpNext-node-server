@@ -1,0 +1,49 @@
+import InvitationModel from "../../models/invitation.model.js";
+import { v4 as uuidv4 } from "uuid";
+
+export async function createInvitation(groupId, invitedBy, invitedUser) {
+  const newInvitation = {
+    _id: uuidv4(),
+    group: groupId,
+    invitedBy,
+    invitedUser,
+  };
+
+  // Check if the invitation already exists
+  const existingInvitation = await InvitationModel.findOne({
+    group: groupId,
+    invitedBy,
+    invitedUser,
+  });
+  if (existingInvitation) {
+    return { error: "Invitation already exists" };
+  }
+
+  // Create the new invitation
+  return await InvitationModel.create(newInvitation);
+}
+
+export async function getAllInvitationsForUser(userId) {
+  const invitations = await InvitationModel.find({
+    invitedUser: userId,
+  }).populate("group invitedBy invitedUser");
+  return invitations;
+}
+
+export async function updateInvitationStatus(invitationId, status) {
+  const updatedInvitation = await InvitationModel.findOneAndUpdate(
+    { _id: invitationId },
+    { status },
+    {
+      new: true,
+    }
+  );
+  return updatedInvitation;
+}
+
+export async function deleteInvitationsForGroup(groupId) {
+  const deletedInvitations = await InvitationModel.deleteMany({
+    group: groupId,
+  });
+  return deletedInvitations;
+}

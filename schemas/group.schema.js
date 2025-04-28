@@ -15,14 +15,10 @@ const groupSchema = new Schema(
   {
     _id: String,
     name: String,
-    creator: {
-      type: String,
-      ref: "UserModel",
-    },
+    creator: String,
     members: [
       {
         type: String,
-        ref: "UserModel",
       },
     ],
   },

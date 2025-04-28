@@ -118,3 +118,79 @@ export const updateUser = async (id, updates) => {
     return { error: `Error occurred when updating user: ${error}` };
   }
 };
+
+export const addGroupToUser = async (userId, groupId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      { $addToSet: { groups: groupId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error adding group to user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return { error: `Error occurred when adding group to user: ${error}` };
+  }
+};
+
+export const removeGroupFromUser = async (userId, groupId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { groups: groupId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error removing group from user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return { error: `Error occurred when removing group from user: ${error}` };
+  }
+};
+
+export const addGroupInviteToUser = async (userId, groupInviteId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      { $addToSet: { groupInvites: groupInviteId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error adding group invite to user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return {
+      error: `Error occurred when adding group invite to user: ${error}`,
+    };
+  }
+};
+
+export const removeGroupInviteFromUser = async (userId, groupInviteId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { groupInvites: groupInviteId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error removing group invite from user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return {
+      error: `Error occurred when removing group invite from user: ${error}`,
+    };
+  }
+};

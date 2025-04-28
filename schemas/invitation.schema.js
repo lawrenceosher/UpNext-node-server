@@ -19,14 +19,8 @@ const invitationSchema = new Schema(
       type: String,
       ref: "GroupModel",
     },
-    invitedBy: {
-      type: String,
-      ref: "UserModel",
-    },
-    invitedUser: {
-      type: String,
-      ref: "UserModel",
-    },
+    invitedBy: String,
+    invitedUser: String,
     status: {
       type: String,
       enum: ["pending", "accepted", "declined"],

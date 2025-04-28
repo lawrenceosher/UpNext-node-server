@@ -17,13 +17,13 @@ import {
 
 export default function GroupController(app) {
   const createNewGroup = async (req, res) => {
-    const { users, groupName } = req.body;
+    const { groupName, creator } = req.body;
     try {
-      const newGroup = await createGroup(users, groupName);
+      const newGroup = await createGroup(groupName, creator);
 
       // Create the new queues for the group
       const movieQueueResult = await createMovieQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
 
@@ -31,35 +31,35 @@ export default function GroupController(app) {
         throw new Error(movieQueueResult.error);
       }
       const tvQueueResult = await createTVQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
       const albumQueueResult = await createAlbumQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
       const bookQueueResult = await createBookQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
       const videoGameQueueResult = await createVideoGameQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
       const podcastQueueResult = await createPodcastQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in podcastQueueResult) {
