@@ -30,8 +30,6 @@ export const findUserByUsername = async (username) => {
   try {
     const user = await UserModel.findOne({ username: username })
       .select("-password")
-      .select("-firstName")
-      .select("-lastName")
       .select("-email");
 
     return user;
@@ -119,10 +117,10 @@ export const updateUser = async (id, updates) => {
   }
 };
 
-export const addGroupToUser = async (userId, groupId) => {
+export const addGroupToUser = async (username, groupId) => {
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
-      { _id: userId },
+      { username },
       { $addToSet: { groups: groupId } },
       { new: true }
     ).select("-password");
@@ -137,10 +135,10 @@ export const addGroupToUser = async (userId, groupId) => {
   }
 };
 
-export const removeGroupFromUser = async (userId, groupId) => {
+export const removeGroupFromUser = async (username, groupId) => {
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
-      { _id: userId },
+      { username },
       { $pull: { groups: groupId } },
       { new: true }
     ).select("-password");
@@ -155,10 +153,10 @@ export const removeGroupFromUser = async (userId, groupId) => {
   }
 };
 
-export const addGroupInviteToUser = async (userId, groupInviteId) => {
+export const addGroupInviteToUser = async (username, groupInviteId) => {
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
-      { _id: userId },
+      { username },
       { $addToSet: { groupInvites: groupInviteId } },
       { new: true }
     ).select("-password");
@@ -175,10 +173,10 @@ export const addGroupInviteToUser = async (userId, groupInviteId) => {
   }
 };
 
-export const removeGroupInviteFromUser = async (userId, groupInviteId) => {
+export const removeGroupInviteFromUser = async (username, groupInviteId) => {
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
-      { _id: userId },
+      { username },
       { $pull: { groupInvites: groupInviteId } },
       { new: true }
     ).select("-password");

@@ -23,10 +23,11 @@ export async function createInvitation(groupId, invitedBy, invitedUser) {
   return await InvitationModel.create(newInvitation);
 }
 
-export async function getAllInvitationsForUser(userId) {
+export async function getAllPendingInvitationsForUser(username) {
   const invitations = await InvitationModel.find({
-    invitedUser: userId,
-  }).populate("group invitedBy invitedUser");
+    invitedUser: username,
+    status: "pending",
+  }).populate("group");
   return invitations;
 }
 

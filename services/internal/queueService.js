@@ -412,3 +412,42 @@ export async function deleteQueueByMediaTypeAndUsernameAndGroup(
 
   return deletedQueues;
 }
+
+export async function addUserToQueue(mediaType, username, group) {
+  const updatedQueue = await QueueModel.findOneAndUpdate(
+    { mediaType, group },
+    { $addToSet: { users: username } },
+    { new: true }
+  )
+
+  return updatedQueue;
+}
+
+export async function addUserToAllGroupQueues(username, group) {
+  const updatedMovieQueue = await addUserToQueue("Movie", username, group);
+  const updatedTVQueue = await addUserToQueue("TV", username, group);
+  const updatedAlbumQueue = await addUserToQueue("Album", username, group);
+  const updatedBookQueue = await addUserToQueue("Book", username, group);
+  const updatedVideoGameQueue = await addUserToQueue("VideoGame", username, group);
+  const updatedPodcastQueue = await addUserToQueue("Podcast", username, group);
+
+  if (
+    !updatedMovieQueue ||
+    !updatedTVQueue ||
+    !updatedAlbumQueue ||
+    !updatedBookQueue ||
+    !updatedVideoGameQueue ||
+    !updatedPodcastQueue
+  ) {
+    throw new Error("Error adding user to all group queues");
+  }
+  
+  return {
+    updatedMovieQueue,
+    updatedTVQueue,
+    updatedAlbumQueue,
+    updatedBookQueue,
+    updatedVideoGameQueue,
+    updatedPodcastQueue,
+  };
+}

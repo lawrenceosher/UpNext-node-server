@@ -14,12 +14,20 @@ import {
   createPodcastQueue,
   deleteQueueByMediaTypeAndGroup,
 } from "../services/internal/queueService.js";
+import { addGroupToUser } from "../services/internal/userService.js";
 
 export default function GroupController(app) {
   const createNewGroup = async (req, res) => {
     const { groupName, creator } = req.body;
     try {
       const newGroup = await createGroup(groupName, creator);
+
+      // Add the group to the creator's groups
+      const updatedUser = await addGroupToUser(creator, newGroup._id);
+
+      if ("error" in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
 
       // Create the new queues for the group
       const movieQueueResult = await createMovieQueue(
