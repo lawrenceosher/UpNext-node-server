@@ -4,6 +4,7 @@ import {
   deleteGroup,
   getAllGroups,
   updateGroup,
+  leaveGroup,
 } from "../services/internal/groupService.js";
 import {
   createMovieQueue,
@@ -14,7 +15,11 @@ import {
   createPodcastQueue,
   deleteQueueByMediaTypeAndGroup,
 } from "../services/internal/queueService.js";
-import { addGroupToUser } from "../services/internal/userService.js";
+import {
+  addGroupToUser,
+  removeGroupFromUser,
+} from "../services/internal/userService.js";
+import { deleteInvitationsForGroup } from "../services/internal/invitationService.js";
 
 export default function GroupController(app) {
   const createNewGroup = async (req, res) => {
@@ -135,6 +140,9 @@ export default function GroupController(app) {
           .json({ error: "Failed to delete associated queues" });
       }
 
+      // Delete the invitations associated with the group
+      await deleteInvitationsForGroup(deletedGroup._id);
+
       return res.status(200).json(deletedGroup);
     } catch (error) {
       return res.status(500).json({ error: "Failed to delete group" });
@@ -160,9 +168,34 @@ export default function GroupController(app) {
     }
   };
 
+  const removeGroupMember = async (req, res) => {
+    const { groupId } = req.params;
+    const { username } = req.body;
+
+    try {
+      const updatedGroup = await leaveGroup(groupId, username);
+
+      if (!updatedGroup) {
+        return res.status(404).json({ error: "Group not found" });
+      }
+
+      // Remove the group from the user's groups
+      const updatedUser = await removeGroupFromUser(username, groupId);
+
+      if ("error" in updatedUser) {
+        return res.status(400).json({ error: updatedUser.error });
+      }
+
+      return res.status(200).json(updatedGroup);
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to remove group member" });
+    }
+  };
+
   app.post("/api/groups", createNewGroup);
   app.get("/api/groups/:username", retrieveAllGroupsForUser);
   app.delete("/api/groups/:groupId", deleteGroupById);
   app.get("/api/groups", retrieveAllGroups);
   app.put("/api/groups/:groupId", updateGroupById);
+  app.put("/api/groups/:groupId/remove", removeGroupMember);
 }
