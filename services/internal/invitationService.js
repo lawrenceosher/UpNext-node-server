@@ -48,3 +48,10 @@ export async function deleteInvitationsForGroup(groupId) {
   });
   return deletedInvitations;
 }
+
+export async function deleteInvitation(invitationId) {
+  const deletedInvitation = await InvitationModel.findOneAndDelete({
+    _id: invitationId,
+  });
+  return deletedInvitation;
+}

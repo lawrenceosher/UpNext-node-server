@@ -143,6 +143,14 @@ export default function GroupController(app) {
       // Delete the invitations associated with the group
       await deleteInvitationsForGroup(deletedGroup._id);
 
+      // Remove the group from all members
+      for (const member of deletedGroup.members) {
+        const updatedUser = await removeGroupFromUser(member, deletedGroup._id);
+        if ("error" in updatedUser) {
+          return res.status(400).json({ error: updatedUser.error });
+        }
+      }
+
       return res.status(200).json(deletedGroup);
     } catch (error) {
       return res.status(500).json({ error: "Failed to delete group" });

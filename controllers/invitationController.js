@@ -2,8 +2,13 @@ import {
   createInvitation,
   getAllPendingInvitationsForUser,
   updateInvitationStatus,
+  deleteInvitation,
 } from "../services/internal/invitationService.js";
-import { addGroupInviteToUser, removeGroupInviteFromUser, addGroupToUser } from "../services/internal/userService.js";
+import {
+  addGroupInviteToUser,
+  removeGroupInviteFromUser,
+  addGroupToUser,
+} from "../services/internal/userService.js";
 import { addUserToGroup } from "../services/internal/groupService.js";
 import { addUserToAllGroupQueues } from "../services/internal/queueService.js";
 
@@ -108,11 +113,25 @@ export default function InvitationController(app) {
         }
 
         // Add the user to the group's queues
-        const queueUpdateResult = await addUserToAllGroupQueues(updatedInvitation.invitedUser, updatedInvitation.group);
-        
+        const queueUpdateResult = await addUserToAllGroupQueues(
+          updatedInvitation.invitedUser,
+          updatedInvitation.group
+        );
+
         if ("error" in queueUpdateResult) {
           return res.status(400).json({
             error: `Error adding user to group queues: ${queueUpdateResult.error}`,
+          });
+        }
+      }
+
+      // If the invitation is declined, delete the invitation
+      if (status === "declined") {
+        const deletedInvitation = await deleteInvitation(invitationId);
+
+        if ("error" in deletedInvitation) {
+          return res.status(400).json({
+            error: `Error deleting invitation: ${deletedInvitation.error}`,
           });
         }
       }
@@ -125,7 +144,37 @@ export default function InvitationController(app) {
     }
   };
 
+  const deleteSentInvitation = async (req, res) => {
+    const { invitationId } = req.params;
+
+    try {
+      const deletedInvitation = await deleteInvitation(invitationId);
+
+      if ("error" in deletedInvitation) {
+        return res.status(400).json({ error: deletedInvitation.error });
+      }
+
+      // Remove the invitation from the invited user's groupInvites
+      const userUpdateResult = await removeGroupInviteFromUser(
+        deletedInvitation.invitedUser,
+        invitationId
+      );
+      if ("error" in userUpdateResult) {
+        return res.status(400).json({
+          error: `Error removing group invite from user: ${userUpdateResult.error}`,
+        });
+      }
+
+      return res.status(200).json(deletedInvitation);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: `Error deleting invitation: ${error}` });
+    }
+  };
+
   app.post("/api/invitation", sendNewInvitation);
   app.get("/api/invitation/:username", getAllInvitationsByUser);
   app.put("/api/invitation/:invitationId", respondToInvitation);
+  app.delete("/api/invitation/:invitationId", deleteSentInvitation);
 }
