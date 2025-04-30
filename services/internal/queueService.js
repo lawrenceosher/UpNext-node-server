@@ -355,12 +355,21 @@ export async function retrieveTop3inCurrentQueue(mediaType, username, group) {
   return queue;
 }
 
-export async function retrieveHistorySummary(mediaType, username, group) {
-  const queue = await QueueModel.findOne({
-    mediaType,
-    users: { $in: [username] },
-    group,
-  }).select("history");
+export async function retrieveTop3inPersonalHistory(
+  mediaType,
+  username,
+  group
+) {
+  const queue = await QueueModel.findOne(
+    {
+      mediaType,
+      users: { $in: [username] },
+      group,
+    },
+    { history: { $slice: 3 } }
+  )
+    .select("history")
+    .populate({ path: "history", model: `${mediaType}Model` });
 
   if (!queue) {
     throw new Error("Queue not found");
@@ -418,7 +427,7 @@ export async function addUserToQueue(mediaType, username, group) {
     { mediaType, group },
     { $addToSet: { users: username } },
     { new: true }
-  )
+  );
 
   return updatedQueue;
 }
@@ -428,7 +437,11 @@ export async function addUserToAllGroupQueues(username, group) {
   const updatedTVQueue = await addUserToQueue("TV", username, group);
   const updatedAlbumQueue = await addUserToQueue("Album", username, group);
   const updatedBookQueue = await addUserToQueue("Book", username, group);
-  const updatedVideoGameQueue = await addUserToQueue("VideoGame", username, group);
+  const updatedVideoGameQueue = await addUserToQueue(
+    "VideoGame",
+    username,
+    group
+  );
   const updatedPodcastQueue = await addUserToQueue("Podcast", username, group);
 
   if (
@@ -441,7 +454,7 @@ export async function addUserToAllGroupQueues(username, group) {
   ) {
     throw new Error("Error adding user to all group queues");
   }
-  
+
   return {
     updatedMovieQueue,
     updatedTVQueue,

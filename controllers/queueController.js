@@ -25,7 +25,7 @@ import {
   deleteMediaFromCurrentQueue,
   deleteMediaFromHistoryQueue,
   retrieveTop3inCurrentQueue,
-  retrieveHistorySummary,
+  retrieveTop3inPersonalHistory,
   findQueuesWithMedia,
 } from "../services/internal/queueService.js";
 import { findUserByUsername } from "../services/internal/userService.js";
@@ -143,7 +143,7 @@ export default function QueueController(app) {
       const resultQueue = await getQueueByMediaTypeAndUsernameAndGroup(
         mediaType,
         username,
-        group === '' ? null : group
+        group === "" ? null : group
       );
 
       if ("error" in resultQueue) {
@@ -288,28 +288,40 @@ export default function QueueController(app) {
     const { username } = req.params;
 
     try {
-      const movieQueue = await retrieveHistorySummary("Movie", username, null);
-      const tvQueue = await retrieveHistorySummary("TV", username, null);
-      const albumQueue = await retrieveHistorySummary("Album", username, null);
-      const podcastQueue = await retrieveHistorySummary(
+      const movieQueue = await retrieveTop3inPersonalHistory(
+        "Movie",
+        username,
+        null
+      );
+      const tvQueue = await retrieveTop3inPersonalHistory("TV", username, null);
+      const albumQueue = await retrieveTop3inPersonalHistory(
+        "Album",
+        username,
+        null
+      );
+      const podcastQueue = await retrieveTop3inPersonalHistory(
         "Podcast",
         username,
         null
       );
-      const gameQueue = await retrieveHistorySummary(
+      const gameQueue = await retrieveTop3inPersonalHistory(
         "VideoGame",
         username,
         null
       );
-      const bookQueue = await retrieveHistorySummary("Book", username, null);
+      const bookQueue = await retrieveTop3inPersonalHistory(
+        "Book",
+        username,
+        null
+      );
 
       const resultSummary = {
-        movie: movieQueue.history.length,
-        tv: tvQueue.history.length,
-        album: albumQueue.history.length,
-        podcast: podcastQueue.history.length,
-        game: gameQueue.history.length,
-        book: bookQueue.history.length,
+        movie: movieQueue,
+        tv: tvQueue,
+        album: albumQueue,
+        podcast: podcastQueue,
+        game: gameQueue,
+        book: bookQueue,
       };
 
       if ("error" in resultSummary) {
