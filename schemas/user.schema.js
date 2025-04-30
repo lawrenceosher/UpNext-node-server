@@ -22,7 +22,6 @@ const userSchema = new Schema(
     },
     password: String,
     dateJoined: Date,
-    email: String,
     groups: [
       {
         type: String,
