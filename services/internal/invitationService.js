@@ -31,6 +31,14 @@ export async function getAllPendingInvitationsForUser(username) {
   return invitations;
 }
 
+export async function getAllPendingInvitationsForGroup(groupId) {
+  const invitations = await InvitationModel.find({
+    group: groupId,
+    status: "pending",
+  });
+  return invitations;
+}
+
 export async function updateInvitationStatus(invitationId, status) {
   const updatedInvitation = await InvitationModel.findOneAndUpdate(
     { _id: invitationId },
@@ -52,6 +60,14 @@ export async function deleteInvitationsForGroup(groupId) {
 export async function deleteInvitation(invitationId) {
   const deletedInvitation = await InvitationModel.findOneAndDelete({
     _id: invitationId,
+  });
+  return deletedInvitation;
+}
+
+export async function deleteInvitationsByUserAndGroup(groupId, username) {
+  const deletedInvitation = await InvitationModel.deleteMany({
+    group: groupId,
+    invitedUser: username,
   });
   return deletedInvitation;
 }

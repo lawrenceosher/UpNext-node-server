@@ -1,6 +1,7 @@
 import {
   createInvitation,
   getAllPendingInvitationsForUser,
+  getAllPendingInvitationsForGroup,
   updateInvitationStatus,
   deleteInvitation,
 } from "../services/internal/invitationService.js";
@@ -59,6 +60,24 @@ export default function InvitationController(app) {
       return res
         .status(500)
         .json({ error: `Error fetching invitations: ${error}` });
+    }
+  };
+
+  const getAllInvitationsByGroup = async (req, res) => {
+    const { groupId } = req.params;
+
+    try {
+      const invitations = await getAllPendingInvitationsForGroup(groupId);
+
+      if ("error" in invitations) {
+        return res.status(400).json({ error: invitations.error });
+      }
+
+      return res.status(200).json(invitations);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: `Error retrieving pending invitations: ${error}` });
     }
   };
 
@@ -175,6 +194,7 @@ export default function InvitationController(app) {
 
   app.post("/api/invitation", sendNewInvitation);
   app.get("/api/invitation/:username", getAllInvitationsByUser);
+  app.get("/api/invitation/group/:groupId", getAllInvitationsByGroup);
   app.put("/api/invitation/:invitationId", respondToInvitation);
   app.delete("/api/invitation/:invitationId", deleteSentInvitation);
 }

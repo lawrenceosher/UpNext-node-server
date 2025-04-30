@@ -19,7 +19,10 @@ import {
   addGroupToUser,
   removeGroupFromUser,
 } from "../services/internal/userService.js";
-import { deleteInvitationsForGroup } from "../services/internal/invitationService.js";
+import {
+  deleteInvitationsForGroup,
+  deleteInvitationsByUserAndGroup,
+} from "../services/internal/invitationService.js";
 
 export default function GroupController(app) {
   const createNewGroup = async (req, res) => {
@@ -193,6 +196,9 @@ export default function GroupController(app) {
       if ("error" in updatedUser) {
         return res.status(400).json({ error: updatedUser.error });
       }
+
+      // Delete the invitations associated with the user in the group
+      await deleteInvitationsByUserAndGroup(groupId, username);
 
       return res.status(200).json(updatedGroup);
     } catch (error) {
