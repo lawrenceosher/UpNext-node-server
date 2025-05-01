@@ -4,6 +4,7 @@ import {
   deleteGroup,
   getAllGroups,
   updateGroup,
+  leaveGroup,
 } from "../services/internal/groupService.js";
 import {
   createMovieQueue,
@@ -14,16 +15,31 @@ import {
   createPodcastQueue,
   deleteQueueByMediaTypeAndGroup,
 } from "../services/internal/queueService.js";
+import {
+  addGroupToUser,
+  removeGroupFromUser,
+} from "../services/internal/userService.js";
+import {
+  deleteInvitationsForGroup,
+  deleteInvitationsByUserAndGroup,
+} from "../services/internal/invitationService.js";
 
 export default function GroupController(app) {
   const createNewGroup = async (req, res) => {
-    const { users, groupName } = req.body;
+    const { groupName, creator } = req.body;
     try {
-      const newGroup = await createGroup(users, groupName);
+      const newGroup = await createGroup(groupName, creator);
+
+      // Add the group to the creator's groups
+      const updatedUser = await addGroupToUser(creator, newGroup._id);
+
+      if ("error" in updatedUser) {
+        throw new Error(updatedUser.error);
+      }
 
       // Create the new queues for the group
       const movieQueueResult = await createMovieQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
 
@@ -31,35 +47,35 @@ export default function GroupController(app) {
         throw new Error(movieQueueResult.error);
       }
       const tvQueueResult = await createTVQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
       const albumQueueResult = await createAlbumQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
       const bookQueueResult = await createBookQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
       const videoGameQueueResult = await createVideoGameQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
       const podcastQueueResult = await createPodcastQueue(
-        [...newGroup.users],
+        [...newGroup.members],
         newGroup._id
       );
       if ("error" in podcastQueueResult) {
@@ -127,6 +143,17 @@ export default function GroupController(app) {
           .json({ error: "Failed to delete associated queues" });
       }
 
+      // Delete the invitations associated with the group
+      await deleteInvitationsForGroup(deletedGroup._id);
+
+      // Remove the group from all members
+      for (const member of deletedGroup.members) {
+        const updatedUser = await removeGroupFromUser(member, deletedGroup._id);
+        if ("error" in updatedUser) {
+          return res.status(400).json({ error: updatedUser.error });
+        }
+      }
+
       return res.status(200).json(deletedGroup);
     } catch (error) {
       return res.status(500).json({ error: "Failed to delete group" });
@@ -152,9 +179,37 @@ export default function GroupController(app) {
     }
   };
 
+  const removeGroupMember = async (req, res) => {
+    const { groupId } = req.params;
+    const { username } = req.body;
+
+    try {
+      const updatedGroup = await leaveGroup(groupId, username);
+
+      if (!updatedGroup) {
+        return res.status(404).json({ error: "Group not found" });
+      }
+
+      // Remove the group from the user's groups
+      const updatedUser = await removeGroupFromUser(username, groupId);
+
+      if ("error" in updatedUser) {
+        return res.status(400).json({ error: updatedUser.error });
+      }
+
+      // Delete the invitations associated with the user in the group
+      await deleteInvitationsByUserAndGroup(groupId, username);
+
+      return res.status(200).json(updatedGroup);
+    } catch (error) {
+      return res.status(500).json({ error: "Failed to remove group member" });
+    }
+  };
+
   app.post("/api/groups", createNewGroup);
   app.get("/api/groups/:username", retrieveAllGroupsForUser);
   app.delete("/api/groups/:groupId", deleteGroupById);
   app.get("/api/groups", retrieveAllGroups);
   app.put("/api/groups/:groupId", updateGroupById);
+  app.put("/api/groups/:groupId/remove", removeGroupMember);
 }

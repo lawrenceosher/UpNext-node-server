@@ -30,8 +30,6 @@ export const findUserByUsername = async (username) => {
   try {
     const user = await UserModel.findOne({ username: username })
       .select("-password")
-      .select("-firstName")
-      .select("-lastName")
       .select("-email");
 
     return user;
@@ -116,5 +114,81 @@ export const updateUser = async (id, updates) => {
     return updatedUser;
   } catch (error) {
     return { error: `Error occurred when updating user: ${error}` };
+  }
+};
+
+export const addGroupToUser = async (username, groupId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username },
+      { $addToSet: { groups: groupId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error adding group to user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return { error: `Error occurred when adding group to user: ${error}` };
+  }
+};
+
+export const removeGroupFromUser = async (username, groupId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username },
+      { $pull: { groups: groupId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error removing group from user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return { error: `Error occurred when removing group from user: ${error}` };
+  }
+};
+
+export const addGroupInviteToUser = async (username, groupInviteId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username },
+      { $addToSet: { groupInvites: groupInviteId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error adding group invite to user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return {
+      error: `Error occurred when adding group invite to user: ${error}`,
+    };
+  }
+};
+
+export const removeGroupInviteFromUser = async (username, groupInviteId) => {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { username },
+      { $pull: { groupInvites: groupInviteId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      throw Error("Error removing group invite from user");
+    }
+
+    return updatedUser;
+  } catch (error) {
+    return {
+      error: `Error occurred when removing group invite from user: ${error}`,
+    };
   }
 };
