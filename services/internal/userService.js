@@ -14,10 +14,6 @@ export const saveUser = async (user) => {
       _id: result._id,
       username: result.username,
       dateJoined: result.dateJoined,
-      firstName: result.firstName,
-      lastName: result.lastName,
-      email: result.email,
-      role: result.role,
     };
 
     return safeUser;
@@ -29,8 +25,7 @@ export const saveUser = async (user) => {
 export const findUserByUsername = async (username) => {
   try {
     const user = await UserModel.findOne({ username: username })
-      .select("-password")
-      .select("-email");
+      .select("-password");
 
     return user;
   } catch (error) {
