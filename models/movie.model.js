@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import movieSchema from '../schemas/movie.schema.js'
 
 /**
