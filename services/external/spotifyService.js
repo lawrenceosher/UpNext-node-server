@@ -64,13 +64,7 @@ export async function searchSpotifyAlbums(query) {
   const detailedAlbums = await Promise.all(
     albums.map(async (album) => {
       // For each album, make a GET request to fetch its details
-      const detailRes = await axios.get(`${SPOTIFY_BASE}/albums/${album.id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-
-      const albumDetails = detailRes.data;
-
-      return normalizeAlbum(albumDetails);
+      return await getAlbumDetailsFromSpotify(album.id);
     })
   );
 
