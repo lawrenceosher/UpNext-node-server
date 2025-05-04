@@ -113,8 +113,7 @@ export async function searchSpotifyPodcasts(query) {
     })
   );
 
-  // filter out any nulls caused by failed fetches
-  return detailedPodcasts.filter(Boolean);
+  return detailedPodcasts;
 }
 
 /**
