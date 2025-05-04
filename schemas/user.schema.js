@@ -9,7 +9,6 @@ import { Schema } from "mongoose";
  * - `username`: The username of the user.
  * - `password`: The password securing the user's account.
  * - `dateJoined`: The date the user joined the platform.
- * - `email`: The email of the user.
  * - `groups`: The groups the user is part of.
  * - `groupInvites`: The invitations the user has received to join groups.
  */
