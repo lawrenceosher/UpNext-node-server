@@ -116,25 +116,7 @@ export async function searchSpotifyPodcasts(query) {
     shows.map(async (show) => {
       try {
         // For each podcast, make a GET request to fetch its details
-        const detailRes = await axios.get(
-          `${SPOTIFY_BASE}/shows/${show.id}?market=US`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
-        );
-
-        const details = detailRes.data;
-
-        const episodesRes = await axios.get(
-          `${SPOTIFY_BASE}/shows/${show.id}/episodes?limit=10&market=US`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
-        );
-
-        const episodes = episodesRes.data?.items || [];
-
-        return normalizePodcast(details, episodes);
+        return await getPodcastDetailsFromSpotify(show.id);
       } catch (error) {
         return {
           error: `Error fetching podcast ${show.id}: ${error.message} `,
@@ -164,6 +146,8 @@ export async function getPodcastDetailsFromSpotify(podcastId) {
 
     const details = detailRes.data;
 
+    // Make a GET request to fetch its episodes
+    // and limit the number of episodes to 10
     const episodesRes = await axios.get(
       `${SPOTIFY_BASE}/shows/${podcastId}/episodes?limit=10&market=US`,
       {
@@ -171,6 +155,7 @@ export async function getPodcastDetailsFromSpotify(podcastId) {
       }
     );
 
+    // Extract the episodes from the response
     const episodes = episodesRes.data?.items || [];
 
     return normalizePodcast(details, episodes);
