@@ -15,6 +15,7 @@ import { Schema } from "mongoose";
  * - `companies`: An array of companies associated with the game.
  * - `platforms`: An array of platforms on which the game is available.
  * - `sourceUrl`: The URL of the source from which the game was fetched.
+ * - `numQueues`: The number of times the game has been queued.
  */
 const videoGameSchema = new Schema(
   {

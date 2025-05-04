@@ -14,7 +14,9 @@ import { Schema } from "mongoose";
  * - `posterPath`: The path to the movie's poster image.
  * - `cast`: An array of cast members in the movie.
  * - `genres`: An array of genres associated with the movie.
+ * - `runtime`: The runtime of the movie in minutes.
  * - `sourceUrl`: The URL of the source from which the movie was fetched.
+ * - `numQueues`: The number of times the movie has been queued.
  */
 const movieSchema = new Schema(
   {
