@@ -114,14 +114,8 @@ export async function searchSpotifyPodcasts(query) {
 
   const detailedPodcasts = await Promise.all(
     shows.map(async (show) => {
-      try {
-        // For each podcast, make a GET request to fetch its details
-        return await getPodcastDetailsFromSpotify(show.id);
-      } catch (error) {
-        return {
-          error: `Error fetching podcast ${show.id}: ${error.message} `,
-        };
-      }
+      // For each podcast, make a GET request to fetch its details
+      return await getPodcastDetailsFromSpotify(show.id);
     })
   );
 
@@ -159,8 +153,9 @@ export async function getPodcastDetailsFromSpotify(podcastId) {
     const episodes = episodesRes.data?.items || [];
 
     return normalizePodcast(details, episodes);
-  } catch (err) {
-    console.error(`Error fetching podcast ${podcastId}:`, err.message);
-    return null;
+  } catch (error) {
+    return {
+      error: `Error fetching podcast ${podcastId}: ${error.message} `,
+    };
   }
 }
