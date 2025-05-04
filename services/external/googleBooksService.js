@@ -26,7 +26,7 @@ const normalizeBook = (item) => {
 
 /**
  * Fetches books from Google Books API based on a search query.
- * @param {string} query - The search query.
+ * @param query - The search query.
  * @returns A promise that resolves to an array of normalized book objects.
  */
 export async function searchGoogleBooks(query) {
