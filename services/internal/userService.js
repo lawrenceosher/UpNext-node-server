@@ -1,4 +1,5 @@
 import UserModel from "../../models/user.model.js";
+import { isInputStringValid } from "../utils.js";
 
 /**
  * Validates the user object to ensure it has the required properties
@@ -15,20 +16,6 @@ const isUserValid = (user) =>
   user.dateJoined !== "" &&
   user._id !== undefined &&
   user._id !== "";
-
-/**
- * Validates the username to ensure it is not undefined or empty
- * @param username - The username to validate
- * @returns - True if the username is valid, false otherwise
- */
-const isUsernameValid = (username) => username !== undefined && username !== "";
-
-/**
- * Validates the ID to ensure it is not undefined or empty
- * @param Id - The ID to validate
- * @returns - True if the ID is valid, false otherwise
- */
-const isIdValid = (Id) => Id !== undefined && Id !== "";
 
 /**
  * Validates the login credentials to ensure they are not undefined or empty
@@ -82,7 +69,7 @@ export const saveUser = async (user) => {
 export const findUserByUsername = async (username) => {
   try {
     // Validate username
-    if (!isUsernameValid(username)) {
+    if (!isInputStringValid(username)) {
       throw Error("Cannot find user with empty username");
     }
 
@@ -105,7 +92,7 @@ export const findUserByUsername = async (username) => {
 export const findUserById = async (id) => {
   try {
     // Validate user ID
-    if (!isIdValid(id)) {
+    if (!isInputStringValid(id)) {
       throw Error("Cannot find user with empty ID");
     }
 
@@ -173,7 +160,7 @@ export const loginUser = async (loginCredentials) => {
 export const deleteUserById = async (id) => {
   try {
     // Validate user ID
-    if (!isIdValid(id)) {
+    if (!isInputStringValid(id)) {
       throw Error("Cannot delete user with empty ID");
     }
 
@@ -201,7 +188,7 @@ export const deleteUserById = async (id) => {
 export const updateUser = async (id, updates) => {
   try {
     // Validate user ID
-    if (!isIdValid(id)) {
+    if (!isInputStringValid(id)) {
       throw Error("Cannot update user with empty ID");
     }
 
@@ -231,11 +218,11 @@ export const updateUser = async (id, updates) => {
 export const addGroupToUser = async (username, groupId) => {
   try {
     // Validate username
-    if (!isUsernameValid(username)) {
+    if (!isInputStringValid(username)) {
       throw Error("Cannot add group to user with empty username");
     }
     // Validate group ID
-    if (!isIdValid(groupId)) {
+    if (!isInputStringValid(groupId)) {
       throw Error("Cannot add group to user with empty group ID");
     }
 
@@ -265,11 +252,11 @@ export const addGroupToUser = async (username, groupId) => {
 export const removeGroupFromUser = async (username, groupId) => {
   try {
     // Validate username
-    if (!isUsernameValid(username)) {
+    if (!isInputStringValid(username)) {
       throw Error("Cannot add group to user with empty username");
     }
     // Validate group ID
-    if (!isIdValid(groupId)) {
+    if (!isInputStringValid(groupId)) {
       throw Error("Cannot add group to user with empty group ID");
     }
     // Find user by username and remove group ID from their groups array
@@ -298,11 +285,11 @@ export const removeGroupFromUser = async (username, groupId) => {
 export const addGroupInviteToUser = async (username, groupInviteId) => {
   try {
     // Validate username
-    if (!isUsernameValid(username)) {
+    if (!isInputStringValid(username)) {
       throw Error("Cannot add group invite to user with empty username");
     }
     // Validate group invite ID
-    if (!isIdValid(groupInviteId)) {
+    if (!isInputStringValid(groupInviteId)) {
       throw Error("Cannot add group invite to user with empty group invite ID");
     }
 
@@ -334,12 +321,12 @@ export const addGroupInviteToUser = async (username, groupInviteId) => {
 export const removeGroupInviteFromUser = async (username, groupInviteId) => {
   try {
     // Validate username
-    if (!isUsernameValid(username)) {
+    if (!isInputStringValid(username)) {
       throw Error("Cannot remove group invite from user with empty username");
     }
 
     // Validate group invite ID
-    if (!isIdValid(groupInviteId)) {
+    if (!isInputStringValid(groupInviteId)) {
       throw Error(
         "Cannot remove group invite from user with empty group invite ID"
       );

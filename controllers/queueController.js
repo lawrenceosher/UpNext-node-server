@@ -27,7 +27,6 @@ import {
   retrieveTop3inCurrentQueue,
   retrieveTop3inPersonalHistory,
 } from "../services/internal/queueService.js";
-import { findUserByUsername } from "../services/internal/userService.js";
 
 export default function QueueController(app) {
   const searchMovies = async (req, res) => {
