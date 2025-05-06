@@ -24,9 +24,40 @@ import {
   deleteInvitationsByUserAndGroup,
 } from "../services/internal/invitationService.js";
 
+/**
+ * Handles group-related functionality, including creating, retrieving,
+ * updating, and deleting groups, as well as managing group members.
+ * @param app - The Express app instance
+ */
 export default function GroupController(app) {
+  /**
+   * Validates the request body for creating a new group.
+   * @param req - The request object
+   * @returns Returns true if the request body is valid, false otherwise
+   */
+  const isNewGroupBodyValid = (req) =>
+    req.body !== undefined &&
+    req.body.groupName !== undefined &&
+    req.body.groupName !== "" &&
+    req.body.creator !== undefined &&
+    req.body.creator !== "";
+
+  /**
+   * Creates a new group, adds it to the creator's groups, and creates corresponding queues for the group.
+   * @param req - The request object containing the group name and creator
+   * @param res - The response object
+   * @returns Either 200 (success) with a JSON response of the new group or an error message
+   */
   const createNewGroup = async (req, res) => {
+    // Validate the request body
+    if (!isNewGroupBodyValid(req)) {
+      res.status(400).send("Invalid request for creating a new group");
+      return;
+    }
+
+    // Extract groupName and creator from the request body
     const { groupName, creator } = req.body;
+
     try {
       const newGroup = await createGroup(groupName, creator);
 
@@ -46,6 +77,7 @@ export default function GroupController(app) {
       if ("error" in movieQueueResult) {
         throw new Error(movieQueueResult.error);
       }
+
       const tvQueueResult = await createTVQueue(
         [...newGroup.members],
         newGroup._id
@@ -53,6 +85,7 @@ export default function GroupController(app) {
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
+
       const albumQueueResult = await createAlbumQueue(
         [...newGroup.members],
         newGroup._id
@@ -60,6 +93,7 @@ export default function GroupController(app) {
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
+
       const bookQueueResult = await createBookQueue(
         [...newGroup.members],
         newGroup._id
@@ -67,6 +101,7 @@ export default function GroupController(app) {
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
+
       const videoGameQueueResult = await createVideoGameQueue(
         [...newGroup.members],
         newGroup._id
@@ -74,6 +109,7 @@ export default function GroupController(app) {
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
+
       const podcastQueueResult = await createPodcastQueue(
         [...newGroup.members],
         newGroup._id
@@ -84,9 +120,7 @@ export default function GroupController(app) {
 
       res.status(200).json(newGroup);
     } catch (error) {
-      res
-        .status(500)
-        .json({ error: "Failed to create group and corresponding queues" });
+      res.status(500).send(error.message);
     }
   };
 
