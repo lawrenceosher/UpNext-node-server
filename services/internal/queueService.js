@@ -7,460 +7,707 @@ import VideoGameModel from "../../models/game.model.js";
 import PodcastModel from "../../models/podcast.model.js";
 import { v4 as uuidv4 } from "uuid";
 
+/**
+ * Creates a new Movie queue for specific users and group
+ * @param usernames - The usernames of the users to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The created queue object or an error message
+ */
 export async function createMovieQueue(usernames, group) {
-  const newMovieQueue = {
-    _id: uuidv4(),
-    mediaType: "Movie",
-    users: Array.isArray(usernames) ? [...usernames] : [usernames],
-    group,
-    current: [],
-    history: [],
-    media: "MovieModel",
-  };
+  try {
+    const newMovieQueue = {
+      _id: uuidv4(),
+      mediaType: "Movie",
+      users: Array.isArray(usernames) ? [...usernames] : [usernames],
+      group,
+      current: [],
+      history: [],
+      media: "MovieModel",
+    };
 
-  return await QueueModel.create(newMovieQueue);
+    const resultQueue = await QueueModel.create(newMovieQueue);
+
+    if (!resultQueue) {
+      throw new Error("Error creating Movie queue");
+    }
+
+    return resultQueue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Creates a new TV queue for specific users and group
+ * @param usernames - The usernames of the users to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The created queue object or an error message
+ */
 export async function createTVQueue(usernames, group) {
-  const newTVQueue = {
-    _id: uuidv4(),
-    mediaType: "TV",
-    users: Array.isArray(usernames) ? [...usernames] : [usernames],
-    group,
-    current: [],
-    history: [],
-    media: "TVModel",
-  };
+  try {
+    const newTVQueue = {
+      _id: uuidv4(),
+      mediaType: "TV",
+      users: Array.isArray(usernames) ? [...usernames] : [usernames],
+      group,
+      current: [],
+      history: [],
+      media: "TVModel",
+    };
 
-  return await QueueModel.create(newTVQueue);
+    const resultQueue = await QueueModel.create(newTVQueue);
+
+    if (!resultQueue) {
+      throw new Error("Error creating TV queue");
+    }
+
+    return resultQueue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Creates a new Album queue for specific users and group
+ * @param usernames - The usernames of the users to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The created queue object or an error message
+ */
 export async function createAlbumQueue(usernames, group) {
-  const newAlbumQueue = {
-    _id: uuidv4(),
-    mediaType: "Album",
-    users: Array.isArray(usernames) ? [...usernames] : [usernames],
-    group,
-    current: [],
-    history: [],
-    media: "AlbumModel",
-  };
+  try {
+    const newAlbumQueue = {
+      _id: uuidv4(),
+      mediaType: "Album",
+      users: Array.isArray(usernames) ? [...usernames] : [usernames],
+      group,
+      current: [],
+      history: [],
+      media: "AlbumModel",
+    };
 
-  return await QueueModel.create(newAlbumQueue);
+    const resultQueue = await QueueModel.create(newAlbumQueue);
+
+    if (!resultQueue) {
+      throw new Error("Error creating Album queue");
+    }
+
+    return resultQueue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Creates a new Book queue for specific users and group
+ * @param usernames - The usernames of the users to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The created queue object or an error message
+ */
 export async function createBookQueue(usernames, group) {
-  const newBookQueue = {
-    _id: uuidv4(),
-    mediaType: "Book",
-    users: Array.isArray(usernames) ? [...usernames] : [usernames],
-    group,
-    current: [],
-    history: [],
-    media: "BookModel",
-  };
+  try {
+    const newBookQueue = {
+      _id: uuidv4(),
+      mediaType: "Book",
+      users: Array.isArray(usernames) ? [...usernames] : [usernames],
+      group,
+      current: [],
+      history: [],
+      media: "BookModel",
+    };
 
-  return await QueueModel.create(newBookQueue);
+    const resultQueue = await QueueModel.create(newBookQueue);
+
+    if (!resultQueue) {
+      throw new Error("Error creating Book queue");
+    }
+
+    return resultQueue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Creates a new VideoGame queue for specific users and group
+ * @param usernames - The usernames of the users to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The created queue object or an error message
+ */
 export async function createVideoGameQueue(usernames, group) {
-  const newVideoGameQueue = {
-    _id: uuidv4(),
-    mediaType: "VideoGame",
-    users: Array.isArray(usernames) ? [...usernames] : [usernames],
-    group,
-    current: [],
-    history: [],
-    media: "VideoGameModel",
-  };
+  try {
+    const newVideoGameQueue = {
+      _id: uuidv4(),
+      mediaType: "VideoGame",
+      users: Array.isArray(usernames) ? [...usernames] : [usernames],
+      group,
+      current: [],
+      history: [],
+      media: "VideoGameModel",
+    };
 
-  return await QueueModel.create(newVideoGameQueue);
+    const resultQueue = await QueueModel.create(newVideoGameQueue);
+
+    if (!resultQueue) {
+      throw new Error("Error creating Video Game queue");
+    }
+
+    return resultQueue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Creates a new Podcast queue for specific users and group
+ * @param usernames - The usernames of the users to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The created queue object or an error message
+ */
 export async function createPodcastQueue(usernames, group) {
-  const newPodcastQueue = {
-    _id: uuidv4(),
-    mediaType: "Podcast",
-    users: Array.isArray(usernames) ? [...usernames] : [usernames],
-    group,
-    current: [],
-    history: [],
-    media: "PodcastModel",
-  };
+  try {
+    const newPodcastQueue = {
+      _id: uuidv4(),
+      mediaType: "Podcast",
+      users: Array.isArray(usernames) ? [...usernames] : [usernames],
+      group,
+      current: [],
+      history: [],
+      media: "PodcastModel",
+    };
 
-  return await QueueModel.create(newPodcastQueue);
+    const resultQueue = await QueueModel.create(newPodcastQueue);
+
+    if (!resultQueue) {
+      throw new Error("Error creating Podcast queue");
+    }
+
+    return resultQueue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Retrieves a queue by media type, username, and group
+ * @param mediaType - The media type of the queue
+ * @param username - The username the queue belongs to
+ * @param group - The group the queue belongs to
+ * @returns - The found queue or an error message
+ */
 export async function getQueueByMediaTypeAndUsernameAndGroup(
   mediaType,
   username,
   group
 ) {
-  const queue = await QueueModel.findOne({
-    mediaType,
-    users: { $in: [username] },
-    group,
-  })
-    .populate({ path: "current", model: `${mediaType}Model` })
-    .populate({ path: "history", model: `${mediaType}Model` });
-  return queue;
+  try {
+    const queue = await QueueModel.findOne({
+      mediaType,
+      users: { $in: [username] },
+      group,
+    })
+      .populate({ path: "current", model: `${mediaType}Model` })
+      .populate({ path: "history", model: `${mediaType}Model` });
+
+    if (!queue) {
+      throw new Error(
+        `${mediaType} Queue not found for user ${username} and group ${group}`
+      );
+    }
+
+    return queue;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
+/**
+ * Adds the media to the current queue for the specified media type and queue ID
+ * @param mediaType - The media type of the queue
+ * @param queueId - The ID of the queue
+ * @param media - The media object to add to the queue
+ * @returns - The updated queue or an error message
+ */
 export async function addMediaToQueue(mediaType, queueId, media) {
-  const currentQueue = await QueueModel.findOne({ _id: queueId });
+  try {
+    // Find the existing queue
+    const currentQueue = await QueueModel.findOne({ _id: queueId });
 
-  if (
-    (currentQueue && currentQueue.current.includes(media._id)) ||
-    currentQueue.history.includes(media._id)
-  ) {
-    throw new Error("Media already in queue");
-  }
-
-  if (mediaType === "Movie") {
-    const movie = await MovieModel.findOne({ _id: media._id });
-    if (!movie) {
-      await MovieModel.create(media);
+    // Check if the media is already in the queue - if so throw an error since duplicates are not allowed
+    if (
+      (currentQueue && currentQueue.current.includes(media._id)) ||
+      currentQueue.history.includes(media._id)
+    ) {
+      throw new Error("Media already in queue");
     }
-    await MovieModel.findOneAndUpdate(
-      { _id: media._id },
-      { $inc: { numQueues: 1 } }
-    );
-  }
 
-  if (mediaType === "TV") {
-    const show = await TVModel.findOne({ _id: media._id });
-    if (!show) {
-      await TVModel.create(media);
+    if (mediaType === "Movie") {
+      // Check if the movie is already in the database
+      const movie = await MovieModel.findOne({ _id: media._id });
+
+      // If not, create a new movie entry
+      if (!movie) {
+        await MovieModel.create(media);
+      }
+
+      // Increment the numQueues field for the movie to track how many queues it is in
+      await MovieModel.findOneAndUpdate(
+        { _id: media._id },
+        { $inc: { numQueues: 1 } }
+      );
     }
-    await TVModel.findOneAndUpdate(
-      { _id: media._id },
-      { $inc: { numQueues: 1 } }
-    );
-  }
 
-  if (mediaType === "Album") {
-    const album = await AlbumModel.findOne({ _id: media._id });
-    if (!album) {
-      await AlbumModel.create(media);
+    if (mediaType === "TV") {
+      // Check if the TV show is already in the database
+      const show = await TVModel.findOne({ _id: media._id });
+
+      // If not, create a new TV show entry
+      if (!show) {
+        await TVModel.create(media);
+      }
+
+      // Increment the numQueues field for the TV show to track how many queues it is in
+      await TVModel.findOneAndUpdate(
+        { _id: media._id },
+        { $inc: { numQueues: 1 } }
+      );
     }
-    await AlbumModel.findOneAndUpdate(
-      { _id: media._id },
-      { $inc: { numQueues: 1 } }
-    );
-  }
 
-  if (mediaType === "Book") {
-    const book = await BookModel.findOne({ _id: media._id });
-    if (!book) {
-      await BookModel.create(media);
+    if (mediaType === "Album") {
+      // Check if the album is already in the database
+      const album = await AlbumModel.findOne({ _id: media._id });
+
+      // If not, create a new album entry
+      if (!album) {
+        await AlbumModel.create(media);
+      }
+
+      // Increment the numQueues field for the album to track how many queues it is in
+      await AlbumModel.findOneAndUpdate(
+        { _id: media._id },
+        { $inc: { numQueues: 1 } }
+      );
     }
-    await BookModel.findOneAndUpdate(
-      { _id: media._id },
-      { $inc: { numQueues: 1 } }
-    );
-  }
 
-  if (mediaType === "VideoGame") {
-    const videoGames = await VideoGameModel.findOne({ _id: media._id });
-    if (!videoGames) {
-      await VideoGameModel.create(media);
+    if (mediaType === "Book") {
+      // Check if the book is already in the database
+      const book = await BookModel.findOne({ _id: media._id });
+
+      // If not, create a new book entry
+      if (!book) {
+        await BookModel.create(media);
+      }
+
+      // Increment the numQueues field for the book to track how many queues it is in
+      await BookModel.findOneAndUpdate(
+        { _id: media._id },
+        { $inc: { numQueues: 1 } }
+      );
     }
-    await VideoGameModel.findOneAndUpdate(
-      { _id: media._id },
-      { $inc: { numQueues: 1 } }
-    );
-  }
 
-  if (mediaType === "Podcast") {
-    const podcasts = await PodcastModel.findOne({ _id: media._id });
-    if (!podcasts) {
-      await PodcastModel.create(media);
+    if (mediaType === "VideoGame") {
+      // Check if the video game is already in the database
+      const videoGames = await VideoGameModel.findOne({ _id: media._id });
+
+      // If not, create a new video game entry
+      if (!videoGames) {
+        await VideoGameModel.create(media);
+      }
+
+      // Increment the numQueues field for the video game to track how many queues it is in
+      await VideoGameModel.findOneAndUpdate(
+        { _id: media._id },
+        { $inc: { numQueues: 1 } }
+      );
     }
-    await PodcastModel.findOneAndUpdate(
-      { _id: media._id },
-      { $inc: { numQueues: 1 } }
-    );
+
+    if (mediaType === "Podcast") {
+      // Check if the podcast is already in the database
+      const podcasts = await PodcastModel.findOne({ _id: media._id });
+
+      // If not, create a new podcast entry
+      if (!podcasts) {
+        await PodcastModel.create(media);
+      }
+
+      // Increment the numQueues field for the podcast to track how many queues it is in
+      await PodcastModel.findOneAndUpdate(
+        { _id: media._id },
+        { $inc: { numQueues: 1 } }
+      );
+    }
+
+    // Add the media to the current queue
+    const queue = await QueueModel.findOneAndUpdate(
+      { _id: queueId },
+      { $addToSet: { current: media._id } },
+      { new: true }
+    )
+      .populate({ path: "current", model: `${mediaType}Model` })
+      .populate({ path: "history", model: `${mediaType}Model` });
+
+    if (!queue) {
+      throw new Error("Queue not found");
+    }
+
+    return queue;
+  } catch (error) {
+    return { error: `Failed to add media to queue: ${error.message}` };
   }
-
-  const queue = await QueueModel.findOneAndUpdate(
-    { _id: queueId },
-    { $addToSet: { current: media._id } },
-    { new: true }
-  )
-    .populate({ path: "current", model: `${mediaType}Model` })
-    .populate({ path: "history", model: `${mediaType}Model` });
-
-  if (!queue) {
-    throw new Error("Queue not found");
-  }
-
-  return queue;
 }
 
+/**
+ * Moves media from the current queue to the history queue
+ * @param mediaType - The media type of the queue
+ * @param queueId - The ID of the queue
+ * @param mediaIDs - The IDs of the media objects to move
+ * @returns - The updated queue or an error message
+ */
 export async function moveMediaFromCurrentToHistory(
   mediaType,
   queueId,
   mediaIDs
 ) {
-  const queue = await QueueModel.findOneAndUpdate(
-    { _id: queueId },
-    {
-      $pull: { current: { $in: mediaIDs } },
-      $addToSet: { history: { $each: mediaIDs } },
-    },
-    { new: true }
-  )
-    .populate({ path: "current", model: `${mediaType}Model` })
-    .populate({ path: "history", model: `${mediaType}Model` });
+  try {
+    // Remove each of the media objects from the current queue and add them to the history queue
+    const queue = await QueueModel.findOneAndUpdate(
+      { _id: queueId },
+      {
+        $pull: { current: { $in: mediaIDs } },
+        $addToSet: { history: { $each: mediaIDs } },
+      },
+      { new: true }
+    )
+      .populate({ path: "current", model: `${mediaType}Model` })
+      .populate({ path: "history", model: `${mediaType}Model` });
 
-  if (!queue) {
-    throw new Error("Queue not found");
+    if (!queue) {
+      throw new Error("Queue not found");
+    }
+
+    return queue;
+  } catch (error) {
+    return {
+      error: `Failed to move media from current to history: ${error.message}`,
+    };
   }
-
-  return queue;
 }
 
+/**
+ * Decrements the numQueues field for the specified media type and ID to track how many queues it is in
+ * @param mediaType - The media type of the queue
+ * @param mediaId - The ID of the media object to decrement
+ */
+async function decrementNumQueues(mediaType, mediaId) {
+  if (mediaType === "Movie") {
+    await MovieModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "TV") {
+    await TVModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Album") {
+    await AlbumModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Book") {
+    await BookModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "VideoGame") {
+    await VideoGameModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+
+  if (mediaType === "Podcast") {
+    await PodcastModel.findOneAndUpdate(
+      { _id: mediaId },
+      { $inc: { numQueues: -1 } }
+    );
+  }
+}
+
+/**
+ * Deletes media from the current queue for the specified media type and queue ID
+ * @param mediaType - The media type of the queue
+ * @param queueId - The ID of the queue
+ * @param mediaId - The ID of the media object to delete
+ * @returns - The updated queue or an error message
+ */
 export async function deleteMediaFromCurrentQueue(mediaType, queueId, mediaId) {
-  const queue = await QueueModel.findOneAndUpdate(
-    { _id: queueId },
-    { $pull: { current: mediaId } },
-    { new: true }
-  )
-    .populate({ path: "current", model: `${mediaType}Model` })
-    .populate({ path: "history", model: `${mediaType}Model` });
+  try {
+    // Remove the media from the current queue
+    const queue = await QueueModel.findOneAndUpdate(
+      { _id: queueId },
+      { $pull: { current: mediaId } },
+      { new: true }
+    )
+      .populate({ path: "current", model: `${mediaType}Model` })
+      .populate({ path: "history", model: `${mediaType}Model` });
 
-  if (!queue) {
-    throw new Error("Queue not found");
+    if (!queue) {
+      throw new Error("Queue not found");
+    }
+
+    // Decrement the numQueues field for the media to track how many queues it is in
+    await decrementNumQueues(mediaType, mediaId);
+
+    return queue;
+  } catch (error) {
+    return {
+      error: `Failed to delete media from current queue: ${error.message}`,
+    };
   }
-
-  if (mediaType === "Movie") {
-    await MovieModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "TV") {
-    await TVModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "Album") {
-    await AlbumModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "Book") {
-    await BookModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "VideoGame") {
-    await VideoGameModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "Podcast") {
-    await PodcastModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  return queue;
 }
 
+/**
+ * Deletes media from the history queue for the specified media type and queue ID
+ * @param mediaType - The media type of the queue
+ * @param queueId - The ID of the queue
+ * @param mediaId - The ID of the media object to delete
+ * @returns - The updated queue or an error message
+ */
 export async function deleteMediaFromHistoryQueue(mediaType, queueId, mediaId) {
-  const queue = await QueueModel.findOneAndUpdate(
-    { _id: queueId },
-    { $pull: { history: mediaId } },
-    { new: true }
-  )
-    .populate({ path: "current", model: `${mediaType}Model` })
-    .populate({ path: "history", model: `${mediaType}Model` });
+  try {
+    // Remove the media from the history queue
+    const queue = await QueueModel.findOneAndUpdate(
+      { _id: queueId },
+      { $pull: { history: mediaId } },
+      { new: true }
+    )
+      .populate({ path: "current", model: `${mediaType}Model` })
+      .populate({ path: "history", model: `${mediaType}Model` });
 
-  if (!queue) {
-    throw new Error("Queue not found");
+    if (!queue) {
+      throw new Error("Queue not found");
+    }
+
+    // Decrement the numQueues field for the media to track how many queues it is in
+    await decrementNumQueues(mediaType, mediaId);
+
+    return queue;
+  } catch (error) {
+    return {
+      error: `Failed to delete media from history queue: ${error.message}`,
+    };
   }
-
-  if (mediaType === "Movie") {
-    await MovieModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "TV") {
-    await TVModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "Album") {
-    await AlbumModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "Book") {
-    await BookModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "VideoGame") {
-    await VideoGameModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  if (mediaType === "Podcast") {
-    await PodcastModel.findOneAndUpdate(
-      { _id: mediaId },
-      { $inc: { numQueues: -1 } }
-    );
-  }
-
-  return queue;
 }
 
+/**
+ * Retrieves the top 3 media in the current queue for the specified media type, username, and group
+ * @param mediaType - The media type of the queue
+ * @param username - The username the queue belongs to
+ * @param group - The group the queue belongs to
+ * @returns - The top 3 media in the current queue or an error message
+ */
 export async function retrieveTop3inCurrentQueue(mediaType, username, group) {
-  const queue = await QueueModel.findOne(
-    {
-      mediaType,
-      users: { $in: [username] },
-      group,
-    },
-    { current: { $slice: 3 } }
-  )
-    .select("current")
-    .populate({ path: "current", model: `${mediaType}Model` });
+  try {
+    // Find the queue for the specified media type, username, and group
+    // and limit the current array to the first 3 elements
+    const queue = await QueueModel.findOne(
+      {
+        mediaType,
+        users: { $in: [username] },
+        group,
+      },
+      { current: { $slice: 3 } }
+    )
+      .select("current")
+      .populate({ path: "current", model: `${mediaType}Model` });
 
-  if (!queue) {
-    throw new Error("Queue not found");
+    if (!queue) {
+      throw new Error("Queue not found");
+    }
+
+    return queue;
+  } catch (error) {
+    return {
+      error: `Failed to retrieve top 3 in current queue: ${error.message}`,
+    };
   }
-
-  return queue;
 }
 
+/**
+ * Retrieves the top 3 media in the personal history for the specified media type, username, and group
+ * @param mediaType - The media type of the queue
+ * @param username - The username the queue belongs to
+ * @param group - The group the queue belongs to
+ * @returns - The top 3 media in the personal history or an error message
+ */
 export async function retrieveTop3inPersonalHistory(
   mediaType,
   username,
   group
 ) {
-  const queue = await QueueModel.findOne(
-    {
-      mediaType,
-      users: { $in: [username] },
-      group,
-    },
-    { history: { $slice: 3 } }
-  )
-    .select("history")
-    .populate({ path: "history", model: `${mediaType}Model` });
+  try {
+    // Find the queue for the specified media type, username, and group
+    // and limit the history array to the first 3 elements
+    const queue = await QueueModel.findOne(
+      {
+        mediaType,
+        users: { $in: [username] },
+        group,
+      },
+      { history: { $slice: 3 } }
+    )
+      .select("history")
+      .populate({ path: "history", model: `${mediaType}Model` });
 
-  if (!queue) {
-    throw new Error("Queue not found");
+    if (!queue) {
+      throw new Error("Queue not found");
+    }
+
+    return queue;
+  } catch (error) {
+    return {
+      error: `Failed to retrieve top 3 in personal history: ${error.message}`,
+    };
   }
-
-  return queue;
 }
 
-export async function findQueuesWithMedia(mediaType, mediaId) {
-  const users = await QueueModel.find({
-    mediaType,
-    current: { $in: [mediaId] },
-  }).distinct("users");
-
-  if (!users) {
-    throw new Error("Queues not found");
-  }
-
-  return users;
-}
-
+/**
+ * Deletes a queue by media type and group
+ * @param mediaType - The media type of the queue
+ * @param group - The group the queue belongs to
+ * @returns - The deleted queue or an error message
+ */
 export async function deleteQueueByMediaTypeAndGroup(mediaType, group) {
-  const deletedQueues = await QueueModel.deleteMany({
-    mediaType,
-    group,
-  });
+  try {
+    // Find the queue for the specified media type and group and delete it
+    const deletedQueues = await QueueModel.deleteMany({
+      mediaType,
+      group,
+    });
 
-  if (!deletedQueues) {
-    throw new Error("Queue not found");
+    if (!deletedQueues) {
+      throw new Error("Queue not found");
+    }
+
+    return deletedQueues;
+  } catch (error) {
+    return {
+      error: `Failed to delete queue: ${error.message}`,
+    };
   }
-
-  return deletedQueues;
 }
 
+/**
+ * Deletes a queue by media type, username, and group
+ * @param mediaType - The media type of the queue
+ * @param username - The username the queue belongs to
+ * @param group - The group the queue belongs to
+ * @returns - The deleted queue or an error message
+ */
 export async function deleteQueueByMediaTypeAndUsernameAndGroup(
   mediaType,
   username,
   group
 ) {
-  const deletedQueues = await QueueModel.deleteMany({
-    mediaType,
-    users: { $in: [username] },
-    group,
-  });
+  try {
+    // Find the queue for the specified media type, username, and group and delete it
+    const deletedQueues = await QueueModel.deleteMany({
+      mediaType,
+      users: { $in: [username] },
+      group,
+    });
 
-  if (!deletedQueues) {
-    throw new Error("Queue not found");
+    if (!deletedQueues) {
+      throw new Error("Queue not found");
+    }
+
+    return deletedQueues;
+  } catch (error) {
+    return {
+      error: `Failed to delete queue: ${error.message}`,
+    };
   }
-
-  return deletedQueues;
 }
 
-export async function addUserToQueue(mediaType, username, group) {
-  const updatedQueue = await QueueModel.findOneAndUpdate(
-    { mediaType, group },
-    { $addToSet: { users: username } },
-    { new: true }
-  );
+/**
+ * Adds a user to the queue for the specified media type and group
+ * @param mediaType - The media type of the queue
+ * @param username - The username to add to the queue
+ * @param group - The group the queue belongs to
+ * @returns - The updated queue or an error message
+ */
+async function addUserToQueue(mediaType, username, group) {
+  try {
+    const updatedQueue = await QueueModel.findOneAndUpdate(
+      { mediaType, group },
+      { $addToSet: { users: username } },
+      { new: true }
+    );
 
-  return updatedQueue;
+    if (!updatedQueue) {
+      throw new Error(
+        `Queue not found for media type ${mediaType} and group ${group}`
+      );
+    }
+
+    return updatedQueue;
+  } catch (error) {
+    return { error: `Failed to add user to queue: ${error.message}` };
+  }
 }
 
+/**
+ * Adds a user to all group queues for the all media types
+ * @param username - The username to add to the queues
+ * @param group - The group the queues belong to
+ * @returns - The updated queues or an error message
+ */
 export async function addUserToAllGroupQueues(username, group) {
-  const updatedMovieQueue = await addUserToQueue("Movie", username, group);
-  const updatedTVQueue = await addUserToQueue("TV", username, group);
-  const updatedAlbumQueue = await addUserToQueue("Album", username, group);
-  const updatedBookQueue = await addUserToQueue("Book", username, group);
-  const updatedVideoGameQueue = await addUserToQueue(
-    "VideoGame",
-    username,
-    group
-  );
-  const updatedPodcastQueue = await addUserToQueue("Podcast", username, group);
+  try {
+    // Add the user to the group queue for each media type
+    const updatedMovieQueue = await addUserToQueue("Movie", username, group);
+    const updatedTVQueue = await addUserToQueue("TV", username, group);
+    const updatedAlbumQueue = await addUserToQueue("Album", username, group);
+    const updatedBookQueue = await addUserToQueue("Book", username, group);
+    const updatedVideoGameQueue = await addUserToQueue(
+      "VideoGame",
+      username,
+      group
+    );
+    const updatedPodcastQueue = await addUserToQueue(
+      "Podcast",
+      username,
+      group
+    );
 
-  if (
-    !updatedMovieQueue ||
-    !updatedTVQueue ||
-    !updatedAlbumQueue ||
-    !updatedBookQueue ||
-    !updatedVideoGameQueue ||
-    !updatedPodcastQueue
-  ) {
-    throw new Error("Error adding user to all group queues");
+    if (
+      !updatedMovieQueue ||
+      !updatedTVQueue ||
+      !updatedAlbumQueue ||
+      !updatedBookQueue ||
+      !updatedVideoGameQueue ||
+      !updatedPodcastQueue
+    ) {
+      throw new Error("Error adding user to all group queues");
+    }
+
+    return {
+      updatedMovieQueue,
+      updatedTVQueue,
+      updatedAlbumQueue,
+      updatedBookQueue,
+      updatedVideoGameQueue,
+      updatedPodcastQueue,
+    };
+  } catch (error) {
+    return { error: error.message };
   }
-
-  return {
-    updatedMovieQueue,
-    updatedTVQueue,
-    updatedAlbumQueue,
-    updatedBookQueue,
-    updatedVideoGameQueue,
-    updatedPodcastQueue,
-  };
 }
