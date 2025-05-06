@@ -18,7 +18,20 @@ import {
 } from "../services/internal/userService.js";
 import { v4 as uuidv4 } from "uuid";
 
+/**
+ * UserController handles user-related routes and operations.
+ * It provides functionality for user signup, login, fetching user details,
+ * updating user information, and deleting users.
+ * It also manages user sessions and personal queues.
+ * @param app - The Express app instance
+ */
 const UserController = (app) => {
+
+  /**
+   * Checks if the request body contains valid user information.
+   * @param req - The request object
+   * @returns - True if the user body is valid, false otherwise
+   */
   const isUserBodyValid = (req) =>
     req.body !== undefined &&
     req.body.username !== undefined &&
@@ -88,7 +101,7 @@ const UserController = (app) => {
       req.session["currentUser"] = result;
       res.status(200).json(result);
     } catch (error) {
-      res.status(500).send(`Error when saving user: ${error}`);
+      res.status(500).send(`Error when saving user: ${error.message}`);
     }
   };
 
