@@ -19,7 +19,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 /**
- * UserController handles user-related routes and operations.
+ * Handles user-related routes and operations.
  * It provides functionality for user signup, login, fetching user details,
  * updating user information, and deleting users.
  * It also manages user sessions and personal queues.
@@ -263,7 +263,7 @@ const UserController = (app) => {
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
-      
+
       const podcastQueueResult =
         await deleteQueueByMediaTypeAndUsernameAndGroup(
           "Podcast",

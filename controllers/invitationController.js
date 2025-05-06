@@ -13,6 +13,10 @@ import {
 import { addUserToGroup } from "../services/internal/groupService.js";
 import { addUserToAllGroupQueues } from "../services/internal/queueService.js";
 
+/**
+ * Handles invitation-related operations such as sending, retrieving, responding to, and deleting invitations.
+ * @param app - The Express app instance
+ */
 export default function InvitationController(app) {
   /**
    * Validates the invitation request to make sure it has valid groupId, invitedBy, and invitedUser.
