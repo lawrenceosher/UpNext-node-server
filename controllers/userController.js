@@ -82,10 +82,12 @@ const UserController = (app) => {
       if ("error" in movieQueueResult) {
         throw new Error(movieQueueResult.error);
       }
+
       const tvQueueResult = await createTVQueue(resultUser.username, null);
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
+
       const albumQueueResult = await createAlbumQueue(
         resultUser.username,
         null
@@ -93,10 +95,12 @@ const UserController = (app) => {
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
+
       const bookQueueResult = await createBookQueue(resultUser.username, null);
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
+
       const videoGameQueueResult = await createVideoGameQueue(
         resultUser.username,
         null
@@ -104,6 +108,7 @@ const UserController = (app) => {
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
+
       const podcastQueueResult = await createPodcastQueue(
         resultUser.username,
         null
@@ -221,6 +226,7 @@ const UserController = (app) => {
       if ("error" in movieQueueResult) {
         throw new Error(movieQueueResult.error);
       }
+
       const tvQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
         "TV",
         deletedUser.username,
@@ -229,6 +235,7 @@ const UserController = (app) => {
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
+
       const albumQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
         "Album",
         deletedUser.username,
@@ -237,6 +244,7 @@ const UserController = (app) => {
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
+
       const bookQueueResult = await deleteQueueByMediaTypeAndUsernameAndGroup(
         "Book",
         deletedUser.username,
@@ -245,6 +253,7 @@ const UserController = (app) => {
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
+
       const videoGameQueueResult =
         await deleteQueueByMediaTypeAndUsernameAndGroup(
           "VideoGame",
@@ -254,6 +263,7 @@ const UserController = (app) => {
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
+      
       const podcastQueueResult =
         await deleteQueueByMediaTypeAndUsernameAndGroup(
           "Podcast",
