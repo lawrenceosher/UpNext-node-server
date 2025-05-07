@@ -14,6 +14,7 @@ import { Schema } from "mongoose";
  * - `latestEpisodeDate`: The date of the latest episode.
  * - `episodes`: An array of episode titles associated with the podcast.
  * - `sourceUrl`: The URL of the source from which the podcast was fetched.
+ * - `numQueues`: The number of times the podcast has been queued.
  */
 const podcastSchema = new Schema(
   {

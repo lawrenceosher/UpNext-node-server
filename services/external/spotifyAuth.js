@@ -17,6 +17,8 @@ export async function getSpotifyToken() {
   const params = new URLSearchParams();
   params.append("grant_type", "client_credentials");
 
+  // Set the request body with the grant type
+  // and the client credentials
   const response = await axios.post(
     "https://accounts.spotify.com/api/token",
     params,
@@ -32,6 +34,7 @@ export async function getSpotifyToken() {
     }
   );
 
+  // Store the token and its expiry time
   cachedToken = response.data.access_token;
   tokenExpiry = Date.now() + response.data.expires_in * 1000;
   return cachedToken;

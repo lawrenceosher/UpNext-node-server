@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import tvSchema from '../schemas/tv.schema.js';
 
 /**

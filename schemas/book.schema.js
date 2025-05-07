@@ -15,6 +15,7 @@ import { Schema } from "mongoose";
  * - `datePublished`: The date the book was published.
  * - `pages`: The number of pages in the book.
  * - `sourceUrl`: The URL of the source from which the book was fetched.
+ * - `numQueues`: The number of times the book has been queued.
  */
 const bookSchema = new Schema(
   {

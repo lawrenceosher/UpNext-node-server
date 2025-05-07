@@ -2,7 +2,6 @@ import {
   createGroup,
   getAllGroupsForUser,
   deleteGroup,
-  getAllGroups,
   updateGroup,
   leaveGroup,
 } from "../services/internal/groupService.js";
@@ -24,9 +23,40 @@ import {
   deleteInvitationsByUserAndGroup,
 } from "../services/internal/invitationService.js";
 
+/**
+ * Handles group-related functionality, including creating, retrieving,
+ * updating, and deleting groups, as well as managing group members.
+ * @param app - The Express app instance
+ */
 export default function GroupController(app) {
+  /**
+   * Validates the request body for creating a new group.
+   * @param req - The request object
+   * @returns Returns true if the request body is valid, false otherwise
+   */
+  const isNewGroupBodyValid = (req) =>
+    req.body !== undefined &&
+    req.body.groupName !== undefined &&
+    req.body.groupName !== "" &&
+    req.body.creator !== undefined &&
+    req.body.creator !== "";
+
+  /**
+   * Creates a new group, adds it to the creator's groups, and creates corresponding queues for the group.
+   * @param req - The request object containing the group name and creator
+   * @param res - The response object
+   * @returns Either 200 (success) with a JSON response of the new group or an error message
+   */
   const createNewGroup = async (req, res) => {
+    // Validate the request body
+    if (!isNewGroupBodyValid(req)) {
+      res.status(400).send("Invalid request for creating a new group");
+      return;
+    }
+
+    // Extract groupName and creator from the request body
     const { groupName, creator } = req.body;
+
     try {
       const newGroup = await createGroup(groupName, creator);
 
@@ -46,6 +76,7 @@ export default function GroupController(app) {
       if ("error" in movieQueueResult) {
         throw new Error(movieQueueResult.error);
       }
+
       const tvQueueResult = await createTVQueue(
         [...newGroup.members],
         newGroup._id
@@ -53,6 +84,7 @@ export default function GroupController(app) {
       if ("error" in tvQueueResult) {
         throw new Error(tvQueueResult.error);
       }
+
       const albumQueueResult = await createAlbumQueue(
         [...newGroup.members],
         newGroup._id
@@ -60,6 +92,7 @@ export default function GroupController(app) {
       if ("error" in albumQueueResult) {
         throw new Error(albumQueueResult.error);
       }
+
       const bookQueueResult = await createBookQueue(
         [...newGroup.members],
         newGroup._id
@@ -67,6 +100,7 @@ export default function GroupController(app) {
       if ("error" in bookQueueResult) {
         throw new Error(bookQueueResult.error);
       }
+
       const videoGameQueueResult = await createVideoGameQueue(
         [...newGroup.members],
         newGroup._id
@@ -74,6 +108,7 @@ export default function GroupController(app) {
       if ("error" in videoGameQueueResult) {
         throw new Error(videoGameQueueResult.error);
       }
+
       const podcastQueueResult = await createPodcastQueue(
         [...newGroup.members],
         newGroup._id
@@ -84,24 +119,46 @@ export default function GroupController(app) {
 
       res.status(200).json(newGroup);
     } catch (error) {
-      res
-        .status(500)
-        .json({ error: "Failed to create group and corresponding queues" });
+      res.status(500).send(error.message);
     }
   };
 
+  /**
+   * Retrieves all groups for a specific user.
+   * @param req - The request object containing the username
+   * @param res - The response object
+   * @returns Either 200 (success) with a JSON response of the groups or an error message
+   */
   const retrieveAllGroupsForUser = async (req, res) => {
     const { username } = req.params;
-    const groups = await getAllGroupsForUser(username);
-    return res.status(200).json(groups);
+
+    try {
+      const groups = await getAllGroupsForUser(username);
+
+      if ("error" in groups) {
+        throw new Error(groups.error);
+      }
+
+      res.status(200).json(groups);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   };
 
+  /**
+   * Deletes a group by its ID and removes it from all members.
+   * @param req - The request object containing the group ID
+   * @param res - The response object
+   * @returns Either 200 (success) with a JSON response of the deleted group or an error message
+   */
   const deleteGroupById = async (req, res) => {
     const { groupId } = req.params;
+
     try {
       const deletedGroup = await deleteGroup(groupId);
-      if (!deletedGroup) {
-        return res.status(404).json({ error: "Group not found" });
+
+      if ("error" in deletedGroup) {  
+        throw new Error(deletedGroup.error);
       }
 
       // Delete the associated queues
@@ -138,9 +195,7 @@ export default function GroupController(app) {
         !deletedVideoGameQueue ||
         !deletedPodcastQueue
       ) {
-        return res
-          .status(500)
-          .json({ error: "Failed to delete associated queues" });
+        throw new Error(`Failed to delete associated queues for group ${groupId}`);
       }
 
       // Delete the invitations associated with the group
@@ -149,67 +204,85 @@ export default function GroupController(app) {
       // Remove the group from all members
       for (const member of deletedGroup.members) {
         const updatedUser = await removeGroupFromUser(member, deletedGroup._id);
+
         if ("error" in updatedUser) {
-          return res.status(400).json({ error: updatedUser.error });
+          throw new Error(updatedUser.error);
         }
       }
 
-      return res.status(200).json(deletedGroup);
+      res.status(200).json(deletedGroup);
     } catch (error) {
-      return res.status(500).json({ error: "Failed to delete group" });
+      res.status(500).send(error.message);
     }
   };
 
-  const retrieveAllGroups = async (req, res) => {
-    const groups = await getAllGroups();
-    return res.status(200).json(groups);
-  };
-
+  /**
+   * Updates a group by its ID.
+   * @param req - The request object containing the group ID and updates
+   * @param res - The response object
+   * @returns Either 200 (success) with a JSON response of the updated group or an error message
+   */
   const updateGroupById = async (req, res) => {
     const { groupId } = req.params;
+
     const groupUpdates = req.body;
+
     try {
       const updatedGroup = await updateGroup(groupId, groupUpdates);
-      if (!updatedGroup) {
-        return res.status(404).json({ error: "Group not found" });
+
+      if ("error" in updatedGroup) {
+        throw new Error(updatedGroup.error)
       }
-      return res.status(200).json(updatedGroup);
+
+      res.status(200).json(updatedGroup);
     } catch (error) {
-      return res.status(500).json({ error: "Failed to update group" });
+      res.status(500).send(error.message);
     }
   };
 
+  /**
+   * Removes a member from a group and deletes their invitations.
+   * @param req - The request object containing the group ID and username
+   * @param res - The response object
+   * @returns Either 200 (success) with a JSON response of the updated group or an error message
+   */
   const removeGroupMember = async (req, res) => {
     const { groupId } = req.params;
     const { username } = req.body;
 
+    // Validate the request body
+    if (!username || username === "") {
+      res.status(400).send("Invalid request for removing group member");
+      return;
+    }
+
     try {
       const updatedGroup = await leaveGroup(groupId, username);
 
-      if (!updatedGroup) {
-        return res.status(404).json({ error: "Group not found" });
+      if ("error" in updatedGroup) {
+        throw new Error(updatedGroup.error);
       }
 
       // Remove the group from the user's groups
       const updatedUser = await removeGroupFromUser(username, groupId);
 
       if ("error" in updatedUser) {
-        return res.status(400).json({ error: updatedUser.error });
+        throw new Error(updatedUser.error);
       }
 
       // Delete the invitations associated with the user in the group
       await deleteInvitationsByUserAndGroup(groupId, username);
 
-      return res.status(200).json(updatedGroup);
+      res.status(200).json(updatedGroup);
     } catch (error) {
-      return res.status(500).json({ error: "Failed to remove group member" });
+      res.status(500).send(error.message);
     }
   };
 
+  // Routes for group-related functionality
   app.post("/api/groups", createNewGroup);
   app.get("/api/groups/:username", retrieveAllGroupsForUser);
   app.delete("/api/groups/:groupId", deleteGroupById);
-  app.get("/api/groups", retrieveAllGroups);
   app.put("/api/groups/:groupId", updateGroupById);
   app.put("/api/groups/:groupId/remove", removeGroupMember);
 }

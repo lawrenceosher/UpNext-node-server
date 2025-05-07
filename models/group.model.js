@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import groupSchema from '../schemas/group.schema.js';
 
 /**

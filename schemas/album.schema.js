@@ -14,6 +14,7 @@ import { Schema } from "mongoose";
  * - `releaseDate`: The release date of the album.
  * - `tracks`: An array of track names associated with the album.
  * - `sourceUrl`: The URL of the source from which the album was fetched.
+ * - `numQueues`: The number of times the album has been queued.
  */
 const albumSchema = new Schema(
   {

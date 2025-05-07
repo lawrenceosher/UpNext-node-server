@@ -18,6 +18,7 @@ import { Schema } from "mongoose";
  * - `totalEpisodes`: The total number of episodes in the show.
  * - `totalSeasons`: The total number of seasons in the show.
  * - `sourceUrl`: The URL of the source from which the show was fetched.
+ * - `numQueues`: The number of times the show has been queued.
  */
 const tvSchema = new Schema(
   {
