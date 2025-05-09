@@ -48,6 +48,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidUsername of invalidUsernames) {
         const result = await createGroup("Test Group", invalidUsername);
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid creator username");
       }
@@ -60,6 +61,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidName of invalidNames) {
         const result = await createGroup(invalidName, "testuser");
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid group name");
       }
@@ -173,6 +175,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidUsername of invalidUsernames) {
         const result = await getAllGroupsForUser(invalidUsername);
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid username");
       }
@@ -214,6 +217,7 @@ describe("Group Service", () => {
 
       // Assert
       expect(Array.isArray(result)).toBe(true);
+
       expect(result[0]).toHaveProperty("_id", groupId);
       expect(result[0]).toHaveProperty("name", "Test Group");
     });
@@ -225,6 +229,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidId of invalidIds) {
         const result = await getGroupById(invalidId);
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid group ID");
       }
@@ -279,6 +284,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidId of invalidIds) {
         const result = await updateGroup(invalidId, updates);
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid group ID");
       }
@@ -332,6 +338,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidId of invalidIds) {
         const result = await deleteGroup(invalidId);
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid group ID");
       }
@@ -385,6 +392,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidId of invalidIds) {
         const result = await leaveGroup(invalidId, "testuser");
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid group ID");
       }
@@ -397,6 +405,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidUsername of invalidUsernames) {
         const result = await leaveGroup(groupId, invalidUsername);
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid username");
       }
@@ -453,6 +462,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidId of invalidIds) {
         const result = await addUserToGroup(invalidId, "testuser");
+
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid group ID");
       }
@@ -465,6 +475,7 @@ describe("Group Service", () => {
       // Act & Assert
       for (const invalidUsername of invalidUsernames) {
         const result = await addUserToGroup(groupId, invalidUsername);
+        
         expect(result).toHaveProperty("error");
         expect(result.error).toContain("Invalid username");
       }
