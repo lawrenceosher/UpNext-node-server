@@ -8,6 +8,12 @@ import BookModel from "../../models/book.model.js";
 import VideoGameModel from "../../models/game.model.js";
 import PodcastModel from "../../models/podcast.model.js";
 import { createMovieQueue } from "../../services/internal/queueService.js";
+import {
+  mockMovieQueue,
+  testUsername,
+  groupId,
+  movieQueueId,
+} from "../mockData.js";
 
 describe("Queue Service", () => {
   beforeEach(() => {
@@ -20,19 +26,6 @@ describe("Queue Service", () => {
     mockingoose(PodcastModel).reset();
     jest.clearAllMocks();
   });
-
-  const groupId = uuidv4();
-  const queueId = uuidv4();
-  const testUsername = "testUser";
-  const mockMovieQueue = {
-    _id: queueId,
-    mediaType: "Movie",
-    users: [testUsername],
-    group: groupId,
-    current: [],
-    history: [],
-    media: "MovieModel",
-  };
 
   describe("createMovieQueue", () => {
     it("should create a new movie queue with valid inputs", async () => {
@@ -65,6 +58,13 @@ describe("Queue Service", () => {
       // Assert
       expect(result).toHaveProperty("error");
       expect(result.error).toEqual("Error creating movie queue");
+    });
+  });
+
+  describe("createTVQueue", () => {
+    it("should create a new tv queue with valid inputs", async () => {
+      // Arrange
+      mockingoose(QueueModel).toReturn();
     });
   });
 });
