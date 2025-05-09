@@ -143,11 +143,6 @@ describe("User Service", () => {
       // Arrange
       const invalidUsernames = ["", undefined];
 
-      const failedErrorMessage = {
-        error:
-          "Error occurred when finding user: Cannot find user with empty username",
-      };
-
       // Test each invalid username
       for (const invalidUsername of invalidUsernames) {
         // Act
@@ -430,12 +425,8 @@ describe("User Service", () => {
     it("should update and return the updated user", async () => {
       // Arrange
       const updatedMockUser = {
-        _id: userId,
-        username: "testuser",
+        ...mockUserWithoutPassword,
         password: "newPass",
-        dateJoined: new Date(),
-        groups: [],
-        groupInvites: [],
       };
       mockingoose(UserModel).toReturn(updatedMockUser, "findOneAndUpdate");
 
@@ -501,10 +492,8 @@ describe("User Service", () => {
       const username = "testuser";
       const groupId = uuidv4();
       const mockUserGroup = {
-        _id: uuidv4(),
-        username,
+        ...mockUserWithoutPassword,
         groups: [groupId],
-        groupInvites: [],
       };
       mockingoose(UserModel).toReturn(mockUserGroup, "findOneAndUpdate");
 
@@ -676,10 +665,7 @@ describe("User Service", () => {
       const username = "testuser";
       const inviteId = uuidv4();
       const mockUserGroupInvites = {
-        _id: uuidv4(),
-        username,
-        dateJoined: new Date(),
-        groups: [],
+        ...mockUserWithoutPassword,
         groupInvites: [inviteId],
       };
       mockingoose(UserModel).toReturn(mockUserGroupInvites, "findOneAndUpdate");
