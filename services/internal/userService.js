@@ -78,9 +78,13 @@ export const findUserByUsername = async (username) => {
       "-password"
     );
 
+    if (!user) {
+      throw Error("User not found");
+    }
+
     return user;
   } catch (error) {
-    return { error: `Error occurred when finding user: ${error}` };
+    return { error: `Error occurred when finding user: ${error.message}` };
   }
 };
 
@@ -105,7 +109,7 @@ export const findUserById = async (id) => {
 
     return user;
   } catch (error) {
-    return { error: `Error occurred when finding user: ${error}` };
+    return { error: `Error occurred when finding user: ${error.message}` };
   }
 };
 
@@ -124,7 +128,7 @@ export const getUsersList = async () => {
 
     return users;
   } catch (error) {
-    return { error: `Error occurred when finding users: ${error}` };
+    return { error: `Error occurred when finding users: ${error.message}` };
   }
 };
 
@@ -148,7 +152,7 @@ export const loginUser = async (loginCredentials) => {
 
     return user;
   } catch (error) {
-    return { error: `Error occurred when authenticating user: ${error}` };
+    return { error: `Error occurred when authenticating user: ${error.message}` };
   }
 };
 
@@ -175,7 +179,7 @@ export const deleteUserById = async (id) => {
 
     return deletedUser;
   } catch (error) {
-    return { error: `Error occurred when deleting user: ${error}` };
+    return { error: `Error occurred when deleting user: ${error.message}` };
   }
 };
 
@@ -205,7 +209,7 @@ export const updateUser = async (id, updates) => {
 
     return updatedUser;
   } catch (error) {
-    return { error: `Error occurred when updating user: ${error}` };
+    return { error: `Error occurred when updating user: ${error.message}` };
   }
 };
 
@@ -239,7 +243,7 @@ export const addGroupToUser = async (username, groupId) => {
 
     return updatedUser;
   } catch (error) {
-    return { error: `Error occurred when adding group to user: ${error}` };
+    return { error: `Error occurred when adding group to user: ${error.message}` };
   }
 };
 
@@ -272,7 +276,7 @@ export const removeGroupFromUser = async (username, groupId) => {
 
     return updatedUser;
   } catch (error) {
-    return { error: `Error occurred when removing group from user: ${error}` };
+    return { error: `Error occurred when removing group from user: ${error.message}` };
   }
 };
 
@@ -307,7 +311,7 @@ export const addGroupInviteToUser = async (username, groupInviteId) => {
     return updatedUser;
   } catch (error) {
     return {
-      error: `Error occurred when adding group invite to user: ${error}`,
+      error: `Error occurred when adding group invite to user: ${error.message}`,
     };
   }
 };
@@ -346,7 +350,7 @@ export const removeGroupInviteFromUser = async (username, groupInviteId) => {
     return updatedUser;
   } catch (error) {
     return {
-      error: `Error occurred when removing group invite from user: ${error}`,
+      error: `Error occurred when removing group invite from user: ${error.message}`,
     };
   }
 };
