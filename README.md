@@ -173,7 +173,7 @@ See the [open issues](https://github.com/lawrenceosher/UpNext-node-server/issues
 ### Top contributors:
 
 <a href="https://github.com/lawrenceosher/UpNext-node-server/graphs/contributors">
-  <img src="https://github.com/lawrenceosher/UpNext-node-server" alt="contrib.rocks image" />
+  <img src="https://contrib.rocks/image?repo=lawrenceosher/UpNext-node-server" alt="contrib.rocks image" />
 </a>
 
 <!-- CONTACT -->
@@ -205,12 +205,12 @@ This project is for personal use and demonstration purposes only. All rights res
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/lawrenceosher/UpNext-web-app.svg?style=for-the-badge
-[contributors-url]: https://github.com/lawrenceosher/UpNext-web-app/graphs/contributors
-[issues-shield]: https://img.shields.io/github/issues/lawrenceosher/UpNext-web-app.svg?style=for-the-badge
-[issues-url]: https://github.com/lawrenceosher/UpNext-web-app/issues
-[license-shield]: https://img.shields.io/github/license/lawrenceosher/UpNext-web-app.svg?style=for-the-badge
-[license-url]: https://github.com/lawrenceosher/UpNext-web-app/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/lawrenceosher/UpNext-node-server.svg?style=for-the-badge
+[contributors-url]: https://github.com/lawrenceosher/UpNext-node-server/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/lawrenceosher/UpNext-node-server.svg?style=for-the-badge
+[issues-url]: https://github.com/lawrenceosher/UpNext-node-server/issues
+[license-shield]: https://img.shields.io/github/license/lawrenceosher/UpNext-node-server.svg?style=for-the-badge
+[license-url]: https://github.com/lawrenceosher/UpNext-node-server/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/losher/
 [home-page]: public/homePage.png
