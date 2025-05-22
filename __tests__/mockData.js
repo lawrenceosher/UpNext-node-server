@@ -69,3 +69,23 @@ export const mockPodcastQueue = {
   history: [],
   media: "PodcastModel",
 };
+
+export const mockBatmanMovie = {
+  _id: "414906",
+  title: "The Batman",
+  director: "Matt Reeves",
+  description:
+    "In his second year of fighting crime, Batman uncovers corruption in Go…",
+  releaseDate: "2022-03-01",
+  posterPath: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+  cast: [
+    "Robert Pattinson",
+    "Zoë Kravitz",
+    "Jeffrey Wright",
+    "Colin Farrell",
+    "Paul Dano",
+  ],
+  genres: ["Crime", "Mystery", "Thriller"],
+  runtime: 177,
+  numQueues: 1,
+};
