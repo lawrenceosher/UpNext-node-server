@@ -4,4 +4,4 @@
  * @returns - True if the input string is valid, false otherwise
  */
 export const isInputStringValid = (inputString) =>
-  inputString !== undefined && inputString !== "";
+  inputString !== undefined && inputString !== "" && inputString !== null;
