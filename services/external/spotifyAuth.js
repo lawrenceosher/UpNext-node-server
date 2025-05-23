@@ -95,7 +95,6 @@ export async function getSpotifyToken() {
     
     // Try to store in Redis, but don't wait for it (fire and forget)
     redisClient.set(REDIS_KEY, JSON.stringify(newToken), 'EX', newToken.expiresIn)
-      .then(() => console.log("Token stored in Redis successfully"))
       .catch(err => console.error("Failed to store token in Redis:", err.message));
     
     return newToken.token;
