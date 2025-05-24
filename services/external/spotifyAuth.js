@@ -4,7 +4,7 @@ import Redis from "ioredis";
 // Memory cache as additional fallback
 let memoryCache = {
   token: null,
-  expiresAt: null
+  expiresAt: null,
 };
 
 // Initialize Redis client with timeout and retry options
@@ -13,7 +13,7 @@ const redisClient = new Redis(process.env.REDIS_URL, {
   retryStrategy: (times) => {
     if (times > 3) return null; // Stop retrying after 3 attempts
     return Math.min(times * 200, 1000); // Exponential backoff
-  }
+  },
 });
 
 // Add error handling
@@ -30,7 +30,7 @@ async function requestSpotifyToken() {
   try {
     const params = new URLSearchParams();
     params.append("grant_type", "client_credentials");
-    
+
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",
       params,
@@ -45,10 +45,10 @@ async function requestSpotifyToken() {
         },
       }
     );
-    
+
     return {
       token: response.data.access_token,
-      expiresIn: response.data.expires_in
+      expiresIn: response.data.expires_in,
     };
   } catch (error) {
     console.error("Failed to request Spotify token:", error.message);
@@ -66,51 +66,78 @@ export async function getSpotifyToken() {
     console.log("Using token from memory cache");
     return memoryCache.token;
   }
-  
+
   try {
     // Try to get token from Redis
     const cachedToken = await Promise.race([
       redisClient.get(REDIS_KEY),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Redis get timeout")), 3000))
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Redis get timeout")), 3000)
+      ),
     ]);
-    
+
     if (cachedToken) {
       const parsed = JSON.parse(cachedToken);
-      // Update memory cache as well
-      memoryCache = {
-        token: parsed.token,
-        expiresAt: now + (parsed.expiresIn * 1000) - 60000
-      };
-      return parsed.token;
+
+      // Check if the token from Redis is still valid
+      if (parsed.expiresAt && new Date(parsed.expiresAt) > new Date()) {
+        // Token is still valid, update memory cache
+        memoryCache = {
+          token: parsed.token,
+          expiresAt: new Date(parsed.expiresAt).getTime(),
+        };
+        return parsed.token;
+      } else {
+        console.log("Token from Redis is expired, requesting new one");
+      }
     }
-    
+
     // If we get here, no valid token in Redis - get a new one
     const newToken = await requestSpotifyToken();
-    
+
+    // Calculate actual expiry timestamp (as ISO string for better serialization)
+    const expiresAt = new Date(
+      Date.now() + newToken.expiresIn * 1000 - 60000
+    ).toISOString();
+
     // Update memory cache
     memoryCache = {
       token: newToken.token,
-      expiresAt: now + (newToken.expiresIn * 1000) - 60000
+      expiresAt: new Date(expiresAt).getTime(),
     };
-    
-    // Try to store in Redis, but don't wait for it (fire and forget)
-    redisClient.set(REDIS_KEY, JSON.stringify(newToken), 'EX', newToken.expiresIn)
-      .catch(err => console.error("Failed to store token in Redis:", err.message));
-    
+
+    // Store token with the expiry timestamp in Redis
+    redisClient
+      .set(
+        REDIS_KEY,
+        JSON.stringify({
+          token: newToken.token,
+          expiresAt: expiresAt,
+        }),
+        "EX",
+        newToken.expiresIn
+      )
+      .catch((err) =>
+        console.error("Failed to store token in Redis:", err.message)
+      );
+
     return newToken.token;
   } catch (error) {
-    console.error("Redis operation failed, falling back to direct API call:", error.message);
-    
+    console.error(
+      "Redis operation failed, falling back to direct API call:",
+      error.message
+    );
+
     // If Redis fails completely, get a fresh token from Spotify
     try {
       const newToken = await requestSpotifyToken();
-      
+
       // Still update memory cache
       memoryCache = {
         token: newToken.token,
-        expiresAt: now + (newToken.expiresIn * 1000) - 60000
+        expiresAt: now + newToken.expiresIn * 1000 - 60000,
       };
-      
+
       return newToken.token;
     } catch (spotifyError) {
       console.error("Spotify API call failed:", spotifyError.message);
