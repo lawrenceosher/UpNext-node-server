@@ -72,7 +72,7 @@ export async function getAllGroupsForUser(username) {
     const groups = await GroupModel.find({ members: { $in: [username] } });
 
     if (!groups || groups.length === 0) {
-      throw new Error(`No groups found for user: ${username}`);
+      return [];
     }
 
     return groups;

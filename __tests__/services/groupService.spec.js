@@ -189,8 +189,7 @@ describe("Group Service", () => {
       const result = await getAllGroupsForUser("userWithNoGroups");
 
       // Assert
-      expect(result).toHaveProperty("error");
-      expect(result.error).toContain("No groups found for user");
+      expect(result).toEqual([])
     });
 
     it("should handle database errors", async () => {
