@@ -53,7 +53,7 @@ const UserController = (app) => {
 
     // If there is already a user with that username, return a bad request since usernames must be unique
     const alreadyExistingUser = await findUserByUsername(req.body.username);
-    if (alreadyExistingUser) {
+    if (alreadyExistingUser && alreadyExistingUser.error === undefined) {
       res.status(400).send("Username already exists");
       return;
     }
