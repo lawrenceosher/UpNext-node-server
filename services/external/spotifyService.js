@@ -2,7 +2,6 @@ import axios from "axios";
 import { getSpotifyToken } from "./spotifyAuth.js";
 
 const SPOTIFY_BASE = "https://api.spotify.com/v1";
-const accessToken = await getSpotifyToken();
 
 /**
  * Normalizes the album details object from Spotify API in accordance with the Album schema.
@@ -52,6 +51,9 @@ export async function searchSpotifyAlbums(query) {
     query
   )}&type=album`;
 
+  // Get the Spotify access token
+  const accessToken = await getSpotifyToken();
+
   // Make a GET request to the Spotify API
   // to search for albums matching the query
   const searchRes = await axios.get(searchUrl, {
@@ -77,6 +79,9 @@ export async function searchSpotifyAlbums(query) {
  * @returns A promise that resolves to a normalized album object.
  */
 export async function getAlbumDetailsFromSpotify(albumId) {
+  // Get the Spotify access token
+  const accessToken = await getSpotifyToken();
+
   const detailRes = await axios.get(`${SPOTIFY_BASE}/albums/${albumId}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   });
@@ -96,6 +101,9 @@ export async function searchSpotifyPodcasts(query) {
   const searchUrl = `${SPOTIFY_BASE}/search?q=${encodeURIComponent(
     query
   )}&type=show&limit=10`;
+
+  // Get the Spotify access token
+  const accessToken = await getSpotifyToken();
 
   // Make a GET request to the Spotify API
   // to search for podcasts matching the query
@@ -122,6 +130,9 @@ export async function searchSpotifyPodcasts(query) {
  * @returns A promise that resolves to a normalized podcast object.
  */
 export async function getPodcastDetailsFromSpotify(podcastId) {
+  // Get the Spotify access token
+  const accessToken = await getSpotifyToken();
+
   try {
     // Make a GET request to fetch its details
     const detailRes = await axios.get(

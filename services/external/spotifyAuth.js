@@ -86,6 +86,7 @@ export async function getSpotifyToken() {
           token: parsed.token,
           expiresAt: new Date(parsed.expiresAt).getTime(),
         };
+        console.log("Using token from Redis cache");
         return parsed.token;
       } else {
         console.log("Token from Redis is expired, requesting new one");
