@@ -21,6 +21,8 @@
     <a href="https://upnextqueue.netlify.app/">Deployed Site</a>
     &middot;
     <a href="https://github.com/lawrenceosher/UpNext-web-app">Client Repo</a>
+    &middot;
+    <a href="https://www.loom.com/share/5d7480b1ff4c43d4bbbb6f38514c01ad?sid=4634e17e-8978-4a1b-b2dc-cc03292f39a6">Video Demo</a>
 
 </div>
 
@@ -182,7 +184,8 @@ See the [open issues](https://github.com/lawrenceosher/UpNext-node-server/issues
 
 Lawrence Osher - osherlawrence@gmail.com
 
-Project Link: 
+Project Link:
+
 - [https://github.com/lawrenceosher/UpNext-node-server](https://github.com/lawrenceosher/UpNext-node-server)
 - [https://github.com/lawrenceosher/UpNext-web-app](https://github.com/lawrenceosher/UpNext-web-app)
 
